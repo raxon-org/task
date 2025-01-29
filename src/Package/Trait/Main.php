@@ -25,7 +25,7 @@ trait Main {
     {
         $object = $this->object();
         d($options);
-        echo 'node';
+        echo 'no';
         breakpoint($flags);
     }
 
