@@ -1,8 +1,8 @@
 {
-    "name" : "raxon/deno",
-    "description" : "raxon/deno see https://raxon.org for detailed usage",
+    "name" : "raxon/task",
+    "description" : "raxon/task see https://raxon.org for detailed usage",
     "type" : "package",
-    "keywords" : ["deno", "raxon", "org", "library", "framework", "event", "raxon.org"],
+    "keywords" : ["task", "raxon", "org", "library", "framework", "event", "raxon.org"],
     "homepage": "https://raxon.org",
     "require" : {
         "ext-posix": "*",
