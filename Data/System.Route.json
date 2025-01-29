@@ -1,0 +1,18 @@
+{
+  "System": {
+    "Route": [
+      {
+        "name": "raxon-org-cli-task",
+        "path": "raxon\/task",
+        "controller": "Package:Raxon:Task:Controller:Cli:run",
+        "priority": 1001,
+        "request": {
+          "language": "en"
+        },
+        "method": [
+          "CLI"
+        ]
+      }
+    ]
+  }
+}
