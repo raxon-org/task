@@ -25,6 +25,7 @@ trait Main {
     {
         $object = $this->object();
         d($options);
+        echo 'ytes';
         breakpoint($flags);
     }
 
