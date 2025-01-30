@@ -34,36 +34,77 @@ trait Main {
     public function task_create($flags, $options): void
     {
         $object = $this->object();
-
-        if(property_exists($options, 'user')){
-            $class = 'Account.User';
-            $node = new Node($object);
-            $where_list = [];
-            foreach($options->user as $property => $value){
-                $where = [
-                    'value' => $value,
-                    'attribute' => $property,
-                    'operator' => '==='
+        $user_uuid = false;
+        $host_uuid = false;
+        $channel_uuid = false;
+        if(App::is_cli()){
+            if(property_exists($options, 'user')){
+                $class = 'Account.User';
+                $node = new Node($object);
+                $where_list = [];
+                foreach($options->user as $property => $value){
+                    $where = [
+                        'value' => $value,
+                        'attribute' => $property,
+                        'operator' => '==='
+                    ];
+                    $where_list[] = $where;
+                }
+                $where_list[] = [
+                    'value' => 1,
+                    'attribute' => 'is.active',
+                    'operator' => '>='
                 ];
-                $where_list[] = $where;
-            }
-            $where_list[] = [
-                'value' => 1,
-                'attribute' => 'is.active',
-                'operator' => '>='
-            ];
-            $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-            if(array_key_exists('node', $record)){
-                if(property_exists($record['node'], 'email')){
-                    $token = User::token($object, $record['node']->email);
-                    breakpoint($token);
+                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
+                if(array_key_exists('node', $record)){
+                    if(property_exists($record['node'], 'uuid')){
+                        $user_uuid = $record['node']->uuid;
+                    }
                 }
             }
-            breakpoint($record);
+            if(property_exists($options, 'host')){
+                $class = 'System.Host';
+                $node = new Node($object);
+                $where_list = [];
+                foreach($options->user as $property => $value){
+                    $where = [
+                        'value' => $value,
+                        'attribute' => $property,
+                        'operator' => '==='
+                    ];
+                    $where_list[] = $where;
+                }
+                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
+                if(array_key_exists('node', $record)){
+                    if(property_exists($record['node'], 'uuid')){
+                        $host_uuid = $record['node']->uuid;
+                    }
+                }
+            }
+            if(property_exists($options, 'channel')){
+                $class = 'System.Channel';
+                $node = new Node($object);
+                $where_list = [];
+                foreach($options->user as $property => $value){
+                    $where = [
+                        'value' => $value,
+                        'attribute' => $property,
+                        'operator' => '==='
+                    ];
+                    $where_list[] = $where;
+                }
+                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
+                if(array_key_exists('node', $record)){
+                    if(property_exists($record['node'], 'uuid')){
+                        $channel_uuid = $record['node']->uuid;
+                    }
+                }
+            }
+            d($channel_uuid);
+            d($user_uuid);
+            d($host_uuid);
+            d($options);
         }
-        d($options);
-        echo 'node';
-        breakpoint($flags);
     }
 
 }
