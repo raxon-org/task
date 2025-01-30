@@ -32,11 +32,18 @@ trait Main {
         if(property_exists($options, 'user')){
             $class = 'Account.User';
             $node = new Node($object);
-            $where = [];
+            $where_list = [];
             foreach($options->user as $property => $value){
-                $where[$property] = $value;
+                $where = [
+                    [
+                        'value' => $value,
+                        'attribute' => $property,
+                        'operator' => '==='
+                    ]
+                ];
+                $where_list[] = $where;
             }
-            $record = $node->record($class, $node->role_system(), ['where' => $where]);
+            $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
             breakpoint($record);
         }
 
