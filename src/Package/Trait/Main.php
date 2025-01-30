@@ -54,16 +54,13 @@ trait Main {
             ];
             $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
             if(array_key_exists('node', $record)){
-                if(property_exists('email', $record['node'])){
+                if(property_exists($record['node'], 'email')){
                     $token = User::token($object, $record['node']->email);
                     breakpoint($token);
                 }
             }
-
             breakpoint($record);
         }
-
-
         d($options);
         echo 'node';
         breakpoint($flags);
