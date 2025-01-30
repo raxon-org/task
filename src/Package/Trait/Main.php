@@ -1,8 +1,10 @@
 <?php
 namespace Package\Raxon\Task\Trait;
 
+use Package\Raxon\Account\Service\Jwt;
 use Raxon\App;
 
+use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
 use Raxon\Module\File;
@@ -24,6 +26,7 @@ trait Main {
 
     /**
      * @throws ObjectException
+     * @throws FileWriteException
      */
     public function task_create($flags, $options): void
     {
@@ -42,6 +45,11 @@ trait Main {
                 $where_list[] = $where;
             }
             $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
+            $options['user'] = $record['node'];
+            $configuration = Jwt::configuration($object);
+            $token = Jwt::get($object, $configuration, $options);
+            $token = $token->toString();
+            breakpoint($token);
             breakpoint($record);
         }
 
