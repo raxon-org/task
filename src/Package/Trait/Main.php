@@ -45,9 +45,9 @@ trait Main {
                 $where_list[] = $where;
             }
             $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-            $options['user'] = $record['node'];
+            $jwt_options['user'] = $record['node'];
             $configuration = Jwt::configuration($object);
-            $token = Jwt::get($object, $configuration, $options);
+            $token = Jwt::get($object, $configuration, $jwt_options);
             $token = $token->toString();
             breakpoint($token);
             breakpoint($record);
