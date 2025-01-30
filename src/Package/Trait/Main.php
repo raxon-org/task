@@ -35,11 +35,9 @@ trait Main {
             $where_list = [];
             foreach($options->user as $property => $value){
                 $where = [
-                    [
-                        'value' => $value,
-                        'attribute' => $property,
-                        'operator' => '==='
-                    ]
+                    'value' => $value,
+                    'attribute' => $property,
+                    'operator' => '==='
                 ];
                 $where_list[] = $where;
             }
