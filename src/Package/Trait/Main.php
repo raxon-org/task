@@ -66,7 +66,7 @@ trait Main {
                 $class = 'System.Host';
                 $node = new Node($object);
                 $where_list = [];
-                foreach($options->user as $property => $value){
+                foreach($options->host as $property => $value){
                     $where = [
                         'value' => $value,
                         'attribute' => $property,
@@ -85,7 +85,7 @@ trait Main {
                 $class = 'System.Channel';
                 $node = new Node($object);
                 $where_list = [];
-                foreach($options->user as $property => $value){
+                foreach($options->channel as $property => $value){
                     $where = [
                         'value' => $value,
                         'attribute' => $property,
