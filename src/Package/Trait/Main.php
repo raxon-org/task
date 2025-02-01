@@ -100,10 +100,13 @@ trait Main {
                     }
                 }
             }
+            breakpoint('test');
+            echo 'node' . PHP_EOL;
             d($channel_uuid);
             d($user_uuid);
             d($host_uuid);
             d($options);
+            breakpoint('test2');
         }
     }
 
