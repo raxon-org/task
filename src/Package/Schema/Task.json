@@ -1,0 +1,60 @@
+{
+  "System": {
+    "Doctrine": {
+      "Schema": [
+        {
+          "table": "task",
+          "entity": "Task",
+          "column": [
+            {
+              "name": "id",
+              "type": "bigint",
+              "options": {
+                "id": true,
+                "unsigned": true,
+                "autoincrement": true
+              }
+            },
+            {
+              "name": "uuid",
+              "type": "string",
+              "options": {
+                "unique": true,
+                "length": 36
+              }
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "options": {
+                "unique": true
+              }
+            },
+            {
+              "name": "command",
+              "type": "array",
+              "options": {
+              }
+            },
+            {
+              "name": "user",
+              "type": "many-to-many",
+              "options": {
+                "target": "User",
+                "map": "tasks",
+                "cascade": [
+                  "persist"
+                ]
+              }
+            }
+          ],
+          "primary_key": [
+            "id"
+          ],
+          "index": [
+          ]
+        }
+      ]
+    }
+  }
+}
