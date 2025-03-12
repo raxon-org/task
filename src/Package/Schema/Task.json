@@ -36,13 +36,9 @@
             },
             {
               "name": "user",
-              "type": "many-to-many",
+              "type": "bigint",
               "options": {
-                "target": "User",
-                "map": "tasks",
-                "cascade": [
-                  "persist"
-                ]
+                "unsigned": true
               }
             }
           ],
@@ -52,8 +48,7 @@
           "index": [
           ],
           "unique": [
-            "uuid",
-            "name"
+            "uuid"
           ]
         }
       ]
