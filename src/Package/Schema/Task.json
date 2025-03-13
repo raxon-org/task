@@ -30,13 +30,13 @@
             },
             {
               "name": "command",
-              "type": "array",
+              "type": "json",
               "options": {
               }
             },
             {
               "name": "controller",
-              "type": "array",
+              "type": "json",
               "options": {
               }
             },
