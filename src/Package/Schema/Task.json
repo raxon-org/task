@@ -54,6 +54,7 @@
           ],
           "index": [
             "command",
+            "controller",
             "user"
           ],
           "unique": [
