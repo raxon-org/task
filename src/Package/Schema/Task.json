@@ -23,7 +23,7 @@
               }
             },
             {
-              "name": "name",
+              "name": "description",
               "type": "string",
               "options": {
               }
@@ -35,10 +35,17 @@
               }
             },
             {
+              "name": "controller",
+              "type": "array",
+              "options": {
+              }
+            },
+            {
               "name": "user",
               "type": "bigint",
               "options": {
-                "unsigned": true
+                "unsigned": true,
+                "nullable": true
               }
             }
           ],
@@ -46,6 +53,8 @@
             "id"
           ],
           "index": [
+            "command",
+            "user"
           ],
           "unique": [
             "uuid"
