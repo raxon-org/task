@@ -19,15 +19,18 @@ trait Main {
     /**
      * @throws Exception
      */
-    public function task_install(): void
+    public function task_install(object $flags, object $options): void
     {
         Core::interactive();
         $object = $this->object();
         echo 'Install ' . $object->request('package') . '...' . PHP_EOL;
         $schema_url = $object->config('project.dir.package') . 'Raxon/Task/Schema/Task.json';
-        $schema_connection = $object->config('doctrine.environment.system.*.uuid');
-        ddd($schema_connection);
-        $command = Core::binary($object) . ' raxon/doctrine schema import -url=' . $schema_url;
+        if(property_exists('connection', $options)){
+            $schema_connection = $options->connection;
+        } else {
+            $schema_connection = $object->config('doctrine.environment.system.*.uuid');
+        }
+        $command = Core::binary($object) . ' raxon/doctrine schema import -url=' . $schema_url . ' -connection=' . $schema_connection;
         echo $command . PHP_EOL;
     }
 
