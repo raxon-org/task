@@ -31,7 +31,14 @@ trait Main {
             $schema_connection = $object->config('doctrine.environment.system.*.uuid');
         }
         $command = Core::binary($object) . ' raxon/doctrine schema import -url=' . $schema_url . ' -connection=' . $schema_connection;
-        echo $command . PHP_EOL;
+        if(property_exists($options, 'patch')){
+            $command .= ' -patch';
+        }
+        if(property_exists($options, 'force')){
+            $command .= ' -force';
+        }
+        exec($command . ' 2>&1', $output, $code);
+        echo implode(PHP_EOL, $output) . PHP_EOL;
     }
 
     /**
