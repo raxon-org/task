@@ -50,12 +50,14 @@
               "name": "output",
               "type": "json",
               "options": {
+                "nullable": true
               }
             },
             {
               "name": "notification",
               "type": "json",
               "options": {
+                "nullable": true
               }
             },
             {
