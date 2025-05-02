@@ -4,179 +4,63 @@
   "#class": "Account.Role",
   "permission": [
     {
-      "name": "System:Task:import",
+      "name": "Task:import",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:record",
+      "name": "Task:create",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:record.relation",
+      "name": "Task:create.many",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:create",
+      "name": "Task:count",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:create.many",
+      "name": "Task:commit",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:count",
+      "name": "Task:delete",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:count.relation",
+      "name": "Task:delete.many",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:commit",
+      "name": "Task:read",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:delete",
+      "name": "Task:put",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:delete.many",
+      "name": "Task:put.many",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:read",
+      "name": "Task:patch",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:read.relation",
+      "name": "Task:patch.many",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:put",
+      "name": "Task:page",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:put.many",
+      "name": "Task:list",
       "#class": "Account.Permission"
     },
     {
-      "name": "System:Task:patch",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:patch.many",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:page",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:page.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:property.delete",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:list",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:list.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:rename",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:import",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:record",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:record.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:create",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:create.many",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:count",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:count.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:commit",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:delete",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:delete.many",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:read",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:read.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:put",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:put.many",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:patch",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:patch.many",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:page",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:page.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action::property.delete",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:list",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:list.relation",
-      "#class": "Account.Permission"
-    },
-    {
-      "name": "System:Task:Action:rename",
+      "name": "Task:rename",
       "#class": "Account.Permission"
     }
   ]
