@@ -25,6 +25,8 @@ trait Main {
         $object = $this->object();
         echo 'Install ' . $object->request('package') . '...' . PHP_EOL;
         $schema_url = $object->config('project.dir.package') . 'Raxon/Task/Schema/Task.json';
+        $schema_connection = $object->config();
+        ddd($schema_connection);
         $command = Core::binary($object) . ' raxon/doctrine schema import -url=' . $schema_url;
         echo $command . PHP_EOL;
     }
