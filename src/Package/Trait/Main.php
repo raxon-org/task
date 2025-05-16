@@ -96,6 +96,7 @@ trait Main {
                     }
                 }
             }
+            /*
             if(property_exists($options, 'channel')){
                 $class = 'System.Channel';
                 $node = new Node($object);
@@ -115,9 +116,10 @@ trait Main {
                     }
                 }
             }
+            */
             d('test');
             echo 'node' . PHP_EOL;
-            d($channel_uuid);
+//            d($channel_uuid);
             d($user_uuid);
             d($host_uuid);
             d($options);
