@@ -171,7 +171,6 @@ trait Main {
         $node = new Node($object);
         $role = $node->role_system();
         $list = Entity::list($object,$connection->manager, $role, $entity, $options);
-        ddd($list);
         return $list;
     }
 
