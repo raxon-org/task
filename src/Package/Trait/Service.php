@@ -39,7 +39,7 @@ trait Service {
         $node = new Node($object);
         $role = $node->role_system();
         $object->request('entity', $entity);
-        $object->request('filter.status', 'Pending');
+        $object->request('filter.status', 'pending');
         $list = Entity::list($object,$connection->manager, $role, $entity, $options);
         return $list;
     }
