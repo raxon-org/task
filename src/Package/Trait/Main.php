@@ -2,10 +2,12 @@
 namespace Package\Raxon\Task\Trait;
 
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
+use Raxon\Doctrine\Module\Entity;
 use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
@@ -143,6 +145,27 @@ trait Main {
             $connection->manager->persist($task);
             $connection->manager->flush();
         }
+    }
+
+    /**
+     * @throws QueryException
+     * @throws ObjectException
+     */
+    public function task_list($flags, $options): array
+    {
+        $object = $this->object();
+        $config = Database::config($object);
+        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+        if($connection === null){
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+        }
+        $connection->manager = Database::entity_manager($object, $config, $connection);
+        $entity = 'Task';
+        $node = new Node($object);
+        $role = $node->role_system();
+        $list = Entity::list($object,$connection->manager, $role, $entity, $options);
+        ddd($list);
+        return $list;
     }
 
 }
