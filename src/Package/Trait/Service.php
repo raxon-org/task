@@ -38,6 +38,7 @@ trait Service {
         $entity = 'Task';
         $node = new Node($object);
         $role = $node->role_system();
+        $object->request('entity', $entity);
         $object->request('filter.status', 'pend2ing');
         $list = Entity::list($object,$connection->manager, $role, $entity, $options);
         return $list;
