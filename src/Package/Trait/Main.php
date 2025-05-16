@@ -8,10 +8,12 @@ use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
+use Raxon\Module\Database;
 use Raxon\Module\File;
 
 use Raxon\Node\Module\Node;
 use Package\Raxon\Account\Service\User;
+use Entity\Task;
 
 use Exception;
 trait Main {
@@ -45,13 +47,14 @@ trait Main {
      * @throws ObjectException
      * @throws FileWriteException
      * @throws ErrorException
+     * @throws Exception
      */
     public function task_create($flags, $options): void
     {
         $object = $this->object();
         $user_uuid = false;
-        $host_uuid = false;
-        $channel_uuid = false;
+//        $host_uuid = false;
+//        $channel_uuid = false;
         if(App::is_cli()){
             if(property_exists($options, 'user')){
                 $class = 'Account.User';
@@ -77,6 +80,7 @@ trait Main {
                     }
                 }
             }
+            /*
             if(property_exists($options, 'host')){
                 $class = 'System.Host';
                 $node = new Node($object);
@@ -96,6 +100,7 @@ trait Main {
                     }
                 }
             }
+            */
             /*
             if(property_exists($options, 'channel')){
                 $class = 'System.Channel';
@@ -117,13 +122,24 @@ trait Main {
                 }
             }
             */
-            d('test');
-            echo 'node' . PHP_EOL;
-//            d($channel_uuid);
-            d($user_uuid);
-            d($host_uuid);
-            d($options);
-            breakpoint('test2');
+
+            $description = $options->description ?? 'Task created by CLI';
+            $command =  $options->command ?? [];
+            $controller = $options->controller ?? [];
+            $task = new Task();
+            $task->setUser($user_uuid);
+            $task->setDescription($description);
+            $task->setCommand($command);
+            $task->setController($controller);
+            $task->setStatus('Pending');
+            $config = Database::config($object);
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+            if($connection === null){
+                $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+            }
+            $em = Database::entity_manager($object, $config, $connection);
+            $connection->manager->persist($task);
+            $connection->manager->flush();
         }
     }
 
