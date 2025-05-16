@@ -155,6 +155,12 @@ trait Main {
     {
         $object = $this->object();
         $config = Database::config($object);
+        if(!property_exists($options, 'environment')){
+            $options->environment = $object->config('framework.environment');
+        }
+        if(!property_exists($options, 'connection')){
+            $options->connection = 'system';
+        }
         $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
         if($connection === null){
             $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
