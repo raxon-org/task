@@ -22,8 +22,6 @@ trait Service {
      */
     public function execute(object $flags, object $options): array
     {
-        ddd('here');
-
         $object = $this->object();
         $config = Database::config($object);
         if(!property_exists($options, 'environment')){
