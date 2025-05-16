@@ -1,7 +1,9 @@
 <?php
 namespace Package\Raxon\Task\Trait;
 
+use Doctrine\ORM\Exception\ORMException;
 use Entity\Task;
+use Exception;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
 use Raxon\Exception\ErrorException;
@@ -10,7 +12,7 @@ use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
 use Raxon\Node\Module\Node;
 
-use Exception;
+
 trait Main {
 
     /**
@@ -43,6 +45,7 @@ trait Main {
      * @throws FileWriteException
      * @throws ErrorException
      * @throws Exception
+     * @throws ORMException
      */
     public function task_create($flags, $options): void
     {
@@ -136,7 +139,7 @@ trait Main {
                 $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
             }
 //            'name', 'environment'
-            $em = Database::entity_manager($object, $config, $connection);
+            $connection->manager = Database::entity_manager($object, $config, $connection);
             $connection->manager->persist($task);
             $connection->manager->flush();
         }
