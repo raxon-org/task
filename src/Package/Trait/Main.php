@@ -150,6 +150,7 @@ trait Main {
     /**
      * @throws QueryException
      * @throws ObjectException
+     * @throws Exception
      */
     public function task_list($flags, $options): array
     {
