@@ -1,19 +1,14 @@
 <?php
 namespace Package\Raxon\Task\Trait;
 
-use Package\Raxon\Account\Service\Jwt;
+use Entity\Task;
 use Raxon\App;
-
+use Raxon\Doctrine\Module\Database;
 use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
-use Raxon\Module\Database;
-use Raxon\Module\File;
-
 use Raxon\Node\Module\Node;
-use Package\Raxon\Account\Service\User;
-use Entity\Task;
 
 use Exception;
 trait Main {
@@ -140,6 +135,7 @@ trait Main {
             if($connection === null){
                 $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
             }
+//            'name', 'environment'
             $em = Database::entity_manager($object, $config, $connection);
             $connection->manager->persist($task);
             $connection->manager->flush();
