@@ -55,6 +55,9 @@ trait Main {
         $user_uuid = false;
 //        $host_uuid = false;
 //        $channel_uuid = false;
+        if(!property_exists($options, 'environment')){
+            $options->environment = $object->config('framework.environment');
+        }
         if(App::is_cli()){
             if(property_exists($options, 'user')){
                 $class = 'Account.User';
