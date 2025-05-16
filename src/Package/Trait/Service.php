@@ -20,7 +20,7 @@ trait Service {
     /**
      * @throws Exception
      */
-    public function run(object $flags, object $options): array
+    public function execute(object $flags, object $options): array
     {
         ddd('here');
 
