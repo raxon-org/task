@@ -213,12 +213,13 @@ trait Service {
                 $i = 0;
                 while(true){
                     echo $url_stdout . PHP_EOL;
-                    /*
+
                     if(File::exist($url_stdout)){
                         $stdout = File::read($url_stdout);
                         echo $stdout;
-                        File::delete($url_stdout);
+//                        File::delete($url_stdout);
                     }
+                    /*
                     if(File::exist($url_stderr)){
                         $stderr = File::read($url_stderr);
                         echo $stderr;
