@@ -178,7 +178,6 @@ trait Service {
         $object->request('order.isCreated', 'ASC');
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection->manager, $role, $options);
-        d($record);
         if(array_key_exists('node', $record)){
             if(
                 $record['node'] !== null &&
@@ -235,8 +234,7 @@ trait Service {
                 }
                 $command .= ' -connection=' . $options->connection;
                 $command .= ' -environment=' . $options->environment;
-                echo $command . PHP_EOL;
-
+                exec($command, $output, $code);
             }
         }
     }
