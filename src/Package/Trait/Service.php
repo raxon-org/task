@@ -289,16 +289,22 @@ trait Service {
                 if($code !== 0){
                     //completed
                     echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
+                    $patch = [
+                        'uuid' => $record['node']['uuid'],
+                        'status' => Status::COMPLETED,
+                    ];
                     if(File::exist($url_stdout)){
                         $stdout = File::read($url_stdout);
-                        echo $stdout;
+                        $patch['output'] = $stdout;
                         File::delete($url_stdout);
                     }
                     if(File::exist($url_stderr)){
                         $stderr = File::read($url_stderr);
-                        echo $stderr;
+                        $patch['notification'] = $stderr;
                         File::delete($url_stderr);
                     }
+                    Entity::patch($object, $connection, $role, $patch);
+
                     /*
                     $status = Status::COMPLETED;
                     $record['node']->setStatus($status);
