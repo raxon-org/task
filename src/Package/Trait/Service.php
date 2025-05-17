@@ -177,66 +177,75 @@ trait Service {
         $object->request('entity', $entity);
         $object->request('filter.status', Status::PENDING);
         $object->request('order.isCreated', 'ASC');
-//        $object->request('page', 2); //test
-        $record = Entity::record($object,$connection->manager, $role, $options);
-        if(array_key_exists('node', $record)){
-            if(
-                $record['node'] !== null &&
-                array_key_exists('id', $record['node'])
-            ){
-                $patch = [
-                    'id' => $record['node']['id'],
-                    'status' => Status::IN_PROGRESS,
-                ];
-                //status IN_PROGRESS after 120 mins it should be set to ERROR
-                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+        $time_start = time();
+        while(true){
+            $is_busy = false;
+            $record = Entity::record($object,$connection->manager, $role, $options);
+            if(array_key_exists('node', $record)){
+                if(
+                    $record['node'] !== null &&
+                    array_key_exists('id', $record['node'])
+                ){
+                    $patch = [
+                        'id' => $record['node']['id'],
+                        'status' => Status::IN_PROGRESS,
+                    ];
+                    //status IN_PROGRESS after 120 mins it should be set to ERROR
+                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                    $is_busy = true;
+                }
             }
-        }
-        $dir_package = $object->config('ramdisk.url') .
-            '0' .
-            $object->config('ds') .
-            'Package' .
-            $object->config('ds') .
-            'Raxon' .
-            $object->config('ds') .
-            'Task' .
-            $object->config('ds')
-        ;
-
-        $dir_stdout = $dir_package .
-            'stdout' .
-            $object->config('ds')
-        ;
-
-        $dir_stderr = $dir_package .
-            'stderr' .
-            $object->config('ds')
-        ;
-        Dir::create($dir_stdout, Dir::CHMOD);
-        Dir::create($dir_stderr, Dir::CHMOD);
-        $process_list = [];
-        if(array_key_exists('node', $record)){
-            if(
-                $record['node'] !== null &&
-                array_key_exists('command', $record['node'])
-            ){
-                $url_stdout = $dir_stdout . $record['node']['uuid'];
-                $url_stderr = $dir_stderr . $record['node']['uuid'];
-                foreach($record['node']['command'] as $nr => $command){
-//                    $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
-                    $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
-                    exec($command, $output, $code);
-                    $proc_id = trim($output[0]);
-                    $process_list[] = $proc_id;
+            if($is_busy === false){
+                sleep(5);
+            } else {
+                $dir_package = $object->config('ramdisk.url') .
+                    '0' .
+                    $object->config('ds') .
+                    'Package' .
+                    $object->config('ds') .
+                    'Raxon' .
+                    $object->config('ds') .
+                    'Task' .
+                    $object->config('ds')
+                ;
+                $dir_stdout = $dir_package .
+                    'stdout' .
+                    $object->config('ds')
+                ;
+                $dir_stderr = $dir_package .
+                    'stderr' .
+                    $object->config('ds')
+                ;
+                Dir::create($dir_stdout, Dir::CHMOD);
+                Dir::create($dir_stderr, Dir::CHMOD);
+                $process_list = [];
+                if(array_key_exists('node', $record)){
+                    if(
+                        $record['node'] !== null &&
+                        array_key_exists('command', $record['node'])
+                    ){
+                        $url_stdout = $dir_stdout . $record['node']['uuid'];
+                        $url_stderr = $dir_stderr . $record['node']['uuid'];
+                        foreach($record['node']['command'] as $nr => $command){
+                            $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
+                            exec($command, $output, $code);
+                            $proc_id = trim($output[0]);
+                            $process_list[] = $proc_id;
+                        }
+                        $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                        foreach($process_list as $proc_id){
+                            $command .= ' -process[]=' . $proc_id;
+                        }
+                        $command .= ' -connection=' . $options->connection;
+                        $command .= ' -environment=' . $options->environment;
+                        exec($command, $output, $code);
+                    }
                 }
-                $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
-//                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
-                foreach($process_list as $proc_id){
-                    $command .= ' -process[]=' . $proc_id;
-                }
-                $command .= ' -connection=' . $options->connection;
-                $command .= ' -environment=' . $options->environment;
-                exec($command, $output, $code);
+            }
+            $time_current = time();
+            if($time_current - $time_start > 60){ // 1 minute time-out
+                //timeout cron every minute
+                break;
             }
         }
     }
@@ -348,6 +357,7 @@ trait Service {
                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                 break;
             } else {
+                //updates the task output / notification every half a second.
                 $patch = [
                     'id' => $record['node']['id'],
                 ];
