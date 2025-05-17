@@ -188,8 +188,8 @@ trait Service {
                     'id' => $record['node']['id'],
                     'status' => Status::IN_PROGRESS,
                 ];
+                //status IN_PROGRESS after 120 mins it should be set to ERROR
                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                ddd($response);
             }
         }
         $dir_package = $object->config('ramdisk.url') .
