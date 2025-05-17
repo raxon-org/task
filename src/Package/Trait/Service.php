@@ -347,6 +347,19 @@ trait Service {
                 }
                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                 break;
+            } else {
+                $patch = [
+                    'id' => $record['node']['id'],
+                ];
+                if(File::exist($url_stdout)){
+                    $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
+                    $patch['output'] = $stdout;
+                }
+                if(File::exist($url_stderr)){
+                    $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
+                    $patch['notification'] = $stderr;
+                }
+                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
             }
         }
     }
