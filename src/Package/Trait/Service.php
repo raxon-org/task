@@ -284,42 +284,35 @@ trait Service {
         $url_stderr = $dir_stderr . $record['node']['uuid'];
         $i = 0;
         while(true){
-            foreach($options->process as $proc_id){
+            $process_active = [];
+            foreach($options->process as $proc_id) {
                 $command = 'ps -p ' . $proc_id;
                 exec($command, $output, $code);
-                if($code !== 0){
-                    //completed
-                    echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
-                    $patch = [
-                        'id' => $record['node']['id'],
-                        'status' => Status::COMPLETED,
-                    ];
-                    if(File::exist($url_stdout)){
-                        $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
-                        $patch['output'] = $stdout;
-                        File::delete($url_stdout);
-                    }
-                    if(File::exist($url_stderr)){
-                        $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
-                        $patch['notification'] = $stderr;
-                        File::delete($url_stderr);
-                    }
-                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                    d($error);
-                    ddd($response);
-
-                    /*
-                    $status = Status::COMPLETED;
-                    $record['node']->setStatus($status);
-                    $connection->manager->persist($record['node']);
-                    $connection->manager->flush();
-                    break;
-                    */
-                }
+                $process_active[] = $code;
             }
-            echo $url_stdout . PHP_EOL;
-            echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
-            sleep(1);
+            if(!in_array(0, $process_active)) {
+                //completed
+                echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
+                $patch = [
+                    'id' => $record['node']['id'],
+                    'status' => Status::COMPLETED,
+                ];
+                if(File::exist($url_stdout)){
+                    $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
+                    $patch['output'] = $stdout;
+                    File::delete($url_stdout);
+                }
+                if(File::exist($url_stderr)){
+                    $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
+                    $patch['notification'] = $stderr;
+                    File::delete($url_stderr);
+                }
+                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                d($error);
+                ddd($response);
+            }
+            //process is running
+            usleep(5 * 1000);
             $i++;
             if($i > 5){
                 break;
