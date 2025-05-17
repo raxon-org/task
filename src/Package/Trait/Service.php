@@ -213,6 +213,7 @@ trait Service {
                 $i = 0;
                 while(true){
                     echo $url_stdout . PHP_EOL;
+                    echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
 
                     if(File::exist($url_stdout)){
                         $stdout = File::read($url_stdout);
