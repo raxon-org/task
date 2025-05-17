@@ -215,6 +215,8 @@ trait Service {
                 foreach($process_list as $proc_id){
                     $command .= ' -process[]=' . $proc_id;
                 }
+                $command .= ' -connection=' . $options->connection;
+                $command .= ' -environment=' . $options->environment;
                 echo $command . PHP_EOL;
 
             }
@@ -222,8 +224,41 @@ trait Service {
         }
     }
 
+    /**
+     * @throws QueryException
+     * @throws ObjectException
+     * @throws Exception
+     */
     public function monitor(object $flags, object $options): void
     {
+        $object = $this->object();
+        $config = Database::config($object);
+        if(!property_exists($options, 'environment')){
+            throw new Exception('Environment not found');
+        }
+        if(!property_exists($options, 'connection')){
+            throw new Exception('Connection not found');
+        }
+        if(!property_exists($options, 'task')){
+            throw new Exception('Task UUID not found');
+        }
+        if(!property_exists($options->task, 'uuid')){
+            throw new Exception('Task UUID not found');
+        }
+        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+        if($connection === null){
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+        }
+        $connection->manager = Database::entity_manager($object, $config, $connection);
+        $entity = 'Task';
+        $node = new Node($object);
+        $role = $node->role_system();
+        $object->request('entity', $entity);
+        $object->request('filter.uuid', $options->task->uuid);
+        $object->request('order.isCreated', 'ASC');
+//        $object->request('page', 2); //test
+        $record = Entity::record($object,$connection->manager, $role, $options);
+
         dd($options);
     }
 
