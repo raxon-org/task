@@ -13,6 +13,7 @@ use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
+use Raxon\Module\Dir;
 use Raxon\Node\Module\Node;
 
 
@@ -152,7 +153,7 @@ trait Service {
     /**
      * @throws Exception
      */
-    public function execute(object $flags, object $options): array
+    public function execute(object $flags, object $options): void
     {
         $object = $this->object();
         $config = Database::config($object);
@@ -174,11 +175,39 @@ trait Service {
         $object->request('filter.status', Status::PENDING);
         $object->request('order.isCreated', 'ASC');
 //        $object->request('page', 2); //test
-
-
         $record = Entity::record($object,$connection->manager, $role, $options);
-        ddd($record);
-        return $record;
+        $dir_package = $object->config('ramdisk.url') .
+            '0' .
+            $object->config('ds') .
+            'Package' .
+            $object->config('ds') .
+            'Raxon' .
+            $object->config('ds') .
+            'Task' .
+            $object->config('ds')
+        ;
+
+        $dir_stdout = $dir_package .
+            'stdout' .
+            $object->config('ds')
+        ;
+
+        $dir_stderr = $dir_package .
+            'stderr' .
+            $object->config('ds')
+        ;
+        Dir::create($dir_stdout, Dir::CHMOD);
+        Dir::create($dir_stderr, Dir::CHMOD);
+        if(array_key_exists('node', $record)){
+            if(array_key_exists('command', $record['node'])){
+                $url_stdout = $dir_stdout . $record['node']['uuid'];
+                $url_stderr = $dir_stderr . $record['node']['uuid'];
+                foreach($record['command'] as $nr => $command){
+                    $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
+                    echo $command . PHP_EOL;
+                }
+            }
+        }
     }
 }
 
