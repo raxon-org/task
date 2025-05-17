@@ -218,7 +218,12 @@ trait Service {
                         if(File::exist($url_stdout)){
                             $stdout = File::read($url_stdout);
                             echo $stdout;
-//                        File::delete($url_stdout);
+                           File::delete($url_stdout);
+                        }
+                        if(File::exist($url_stderr)){
+                            $stderr = File::read($url_stderr);
+                            echo $stderr;
+                            File::delete($url_stderr);
                         }
                         /*
                         $status = Status::COMPLETED;
@@ -230,15 +235,6 @@ trait Service {
                     }
                     echo $url_stdout . PHP_EOL;
                     echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
-
-
-                    /*
-                    if(File::exist($url_stderr)){
-                        $stderr = File::read($url_stderr);
-                        echo $stderr;
-                        File::delete($url_stderr);
-                    }
-                    */
                     sleep(1);
                     $i++;
                     if($i > 5){
