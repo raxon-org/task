@@ -199,6 +199,7 @@ trait Service {
         ;
         Dir::create($dir_stdout, Dir::CHMOD);
         Dir::create($dir_stderr, Dir::CHMOD);
+        $process_list = [];
         if(array_key_exists('node', $record)){
             if(array_key_exists('command', $record['node'])){
                 $url_stdout = $dir_stdout . $record['node']['uuid'];
@@ -207,7 +208,14 @@ trait Service {
                     $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
                     exec($command, $output, $code);
                     $proc_id = trim($output[0]);
+                    $process_list[] = $proc_id;
                 }
+                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                foreach($process_list as $proc_id){
+                    $command .= ' -process[]=' . $proc_id;
+                }
+                echo $command . PHP_EOL;
+                /*
                 $i = 0;
                 while(true){
                     $command = 'ps -p ' . $proc_id;
@@ -232,6 +240,7 @@ trait Service {
                         $connection->manager->flush();
                         break;
                         */
+                /*
                     }
                     echo $url_stdout . PHP_EOL;
                     echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
@@ -241,6 +250,7 @@ trait Service {
                         break;
                     }
                 }
+                */
             }
         }
     }
