@@ -210,7 +210,7 @@ trait Service {
                     $proc_id = trim($output[0]);
                     $process_list[] = $proc_id;
                 }
-                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
                 foreach($process_list as $proc_id){
                     $command .= ' -process[]=' . $proc_id;
                 }
