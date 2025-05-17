@@ -202,7 +202,7 @@ trait Service {
             if(array_key_exists('command', $record['node'])){
                 $url_stdout = $dir_stdout . $record['node']['uuid'];
                 $url_stderr = $dir_stderr . $record['node']['uuid'];
-                foreach($record['command'] as $nr => $command){
+                foreach($record['node']['command'] as $nr => $command){
                     $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
                     echo $url_stdout . PHP_EOL;
                     echo $url_stderr . PHP_EOL;
