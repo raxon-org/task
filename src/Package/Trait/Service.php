@@ -328,7 +328,7 @@ trait Service {
             //process is running
             usleep(5 * 1000);
             $i++;
-            if($i > 5){
+            if($i > 50){
                 break;
             }
         }
