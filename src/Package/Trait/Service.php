@@ -147,7 +147,8 @@ trait Service {
         $entity = 'Task';
         $node = new Node($object);
         $role = $node->role_system();
-        $list = Entity::list($object,$connection->manager, $role, $entity, $options);
+        $object->request('entity', $entity);
+        $list = Entity::list($object,$connection->manager, $role, $options);
         return $list;
     }
 
