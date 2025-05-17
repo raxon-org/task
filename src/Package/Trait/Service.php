@@ -223,13 +223,14 @@ trait Service {
                 $url_stdout = $dir_stdout . $record['node']['uuid'];
                 $url_stderr = $dir_stderr . $record['node']['uuid'];
                 foreach($record['node']['command'] as $nr => $command){
-                    $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
+//                    $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
+                    $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
                     exec($command, $output, $code);
                     $proc_id = trim($output[0]);
                     $process_list[] = $proc_id;
                 }
                 $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
-                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+//                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
                 foreach($process_list as $proc_id){
                     $command .= ' -process[]=' . $proc_id;
                 }
