@@ -153,6 +153,7 @@ trait Service {
 
     /**
      * @throws Exception
+     * @throws ORMException
      */
     public function execute(object $flags, object $options): void
     {
