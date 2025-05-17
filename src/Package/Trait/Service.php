@@ -245,6 +245,9 @@ trait Service {
         if(!property_exists($options->task, 'uuid')){
             throw new Exception('Task UUID not found');
         }
+        if(!property_exists($options, 'process')){
+            throw new Exception('Process ID not found');
+        }
         $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
         if($connection === null){
             $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
@@ -280,32 +283,31 @@ trait Service {
         $url_stderr = $dir_stderr . $record['node']['uuid'];
         $i = 0;
         ddd($options->process);
-
-        /*
         while(true){
-           $command = 'ps -p ' . $proc_id;
-                   exec($command, $output, $code);
-                   if($code !== 0){
-                       //completed
-                       echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
-                       if(File::exist($url_stdout)){
-                           $stdout = File::read($url_stdout);
-                           echo $stdout;
-                          File::delete($url_stdout);
-                       }
-                       if(File::exist($url_stderr)){
-                           $stderr = File::read($url_stderr);
-                           echo $stderr;
-                           File::delete($url_stderr);
-                       }
-
-                       $status = Status::COMPLETED;
-                       $record['node']->setStatus($status);
-                       $connection->manager->persist($record['node']);
-                       $connection->manager->flush();
-                       break;
-
-
+            foreach($options->process as $proc_id){
+                $command = 'ps -p ' . $proc_id;
+                exec($command, $output, $code);
+                if($code !== 0){
+                    //completed
+                    echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
+                    if(File::exist($url_stdout)){
+                        $stdout = File::read($url_stdout);
+                        echo $stdout;
+                        File::delete($url_stdout);
+                    }
+                    if(File::exist($url_stderr)){
+                        $stderr = File::read($url_stderr);
+                        echo $stderr;
+                        File::delete($url_stderr);
+                    }
+                    /*
+                    $status = Status::COMPLETED;
+                    $record['node']->setStatus($status);
+                    $connection->manager->persist($record['node']);
+                    $connection->manager->flush();
+                    break;
+                    */
+                }
             }
             echo $url_stdout . PHP_EOL;
             echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
@@ -315,7 +317,6 @@ trait Service {
                 break;
             }
         }
-        */
     }
 
 
