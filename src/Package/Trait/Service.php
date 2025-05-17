@@ -179,7 +179,10 @@ trait Service {
         $record = Entity::record($object,$connection->manager, $role, $options);
         d($record);
         if(array_key_exists('node', $record)){
-            if(array_key_exists('id', $record['node'])){
+            if(
+                $record['node'] !== null &&
+                array_key_exists('id', $record['node'])
+            ){
                 $patch = [
                     'id' => $record['node']['id'],
                     'status' => Status::IN_PROGRESS,
