@@ -14,6 +14,7 @@ use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Core;
 use Raxon\Module\Dir;
+use Raxon\Module\File;
 use Raxon\Node\Module\Node;
 
 
@@ -205,10 +206,22 @@ trait Service {
                 foreach($record['node']['command'] as $nr => $command){
                     $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
                     exec($command . ' 2>&1', $output, $code);
-                    echo implode(PHP_EOL, $output);
 //                    echo $url_stdout . PHP_EOL;
 //                    echo $url_stderr . PHP_EOL;
 //                    echo $command . PHP_EOL;
+                }
+                $i = 0;
+                while(true){
+                    if(File::exist($url_stdout)){
+                        $stdout = File::read($url_stdout);
+                        echo $stdout;
+                        File::delete($url_stdout);
+                    }
+                    sleep(1);
+                    $i++;
+                    if($i > 5){
+                        break;
+                    }
                 }
             }
         }
