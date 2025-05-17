@@ -255,10 +255,9 @@ trait Service {
         $role = $node->role_system();
         $object->request('entity', $entity);
         $object->request('filter.uuid', $options->task->uuid);
-        $object->request('order.isCreated', 'ASC');
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection->manager, $role, $options);
-
+        d($record);
         dd($options);
     }
 
