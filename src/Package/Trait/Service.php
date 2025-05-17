@@ -295,12 +295,12 @@ trait Service {
                         'status' => Status::COMPLETED,
                     ];
                     if(File::exist($url_stdout)){
-                        $stdout = File::read($url_stdout);
+                        $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
                         $patch['output'] = $stdout;
                         File::delete($url_stdout);
                     }
                     if(File::exist($url_stderr)){
-                        $stderr = File::read($url_stderr);
+                        $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
                         $patch['notification'] = $stderr;
                         File::delete($url_stderr);
                     }
