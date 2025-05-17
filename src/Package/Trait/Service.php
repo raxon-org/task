@@ -291,7 +291,7 @@ trait Service {
                     //completed
                     echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
                     $patch = [
-                        'uuid' => $record['node']['uuid'],
+                        'id' => $record['node']['id'],
                         'status' => Status::COMPLETED,
                     ];
                     if(File::exist($url_stdout)){
