@@ -204,7 +204,7 @@ trait Service {
                 $url_stdout = $dir_stdout . $record['node']['uuid'];
                 $url_stderr = $dir_stderr . $record['node']['uuid'];
                 foreach($record['node']['command'] as $nr => $command){
-                    $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
+                    $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
                     exec($command, $output, $code);
                     d($output);
 //                    echo $url_stdout . PHP_EOL;
