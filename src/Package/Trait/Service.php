@@ -211,11 +211,23 @@ trait Service {
                     $process_list[] = $proc_id;
                 }
                 $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                $command = Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
                 foreach($process_list as $proc_id){
                     $command .= ' -process[]=' . $proc_id;
                 }
                 echo $command . PHP_EOL;
-                /*
+
+            }
+
+        }
+    }
+
+    public function monitor(object $flags, object $options): void
+    {
+        dd($options);
+    }
+
+    /*
                 $i = 0;
                 while(true){
                     $command = 'ps -p ' . $proc_id;
@@ -240,19 +252,17 @@ trait Service {
                         $connection->manager->flush();
                         break;
                         */
-                /*
-                    }
-                    echo $url_stdout . PHP_EOL;
-                    echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
-                    sleep(1);
-                    $i++;
-                    if($i > 5){
-                        break;
-                    }
-                }
-                */
-            }
+    /*
+        }
+        echo $url_stdout . PHP_EOL;
+        echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
+        sleep(1);
+        $i++;
+        if($i > 5){
+            break;
         }
     }
+    */
+
 }
 
