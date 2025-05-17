@@ -257,46 +257,68 @@ trait Service {
         $object->request('filter.uuid', $options->task->uuid);
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection->manager, $role, $options);
-        d($record);
-        dd($options);
+        $dir_package = $object->config('ramdisk.url') .
+            '0' .
+            $object->config('ds') .
+            'Package' .
+            $object->config('ds') .
+            'Raxon' .
+            $object->config('ds') .
+            'Task' .
+            $object->config('ds')
+        ;
+        $dir_stdout = $dir_package .
+            'stdout' .
+            $object->config('ds')
+        ;
+
+        $dir_stderr = $dir_package .
+            'stderr' .
+            $object->config('ds')
+        ;
+        $url_stdout = $dir_stdout . $record['node']['uuid'];
+        $url_stderr = $dir_stderr . $record['node']['uuid'];
+        $i = 0;
+        ddd($options->process);
+
+        /*
+        while(true){
+           $command = 'ps -p ' . $proc_id;
+                   exec($command, $output, $code);
+                   if($code !== 0){
+                       //completed
+                       echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
+                       if(File::exist($url_stdout)){
+                           $stdout = File::read($url_stdout);
+                           echo $stdout;
+                          File::delete($url_stdout);
+                       }
+                       if(File::exist($url_stderr)){
+                           $stderr = File::read($url_stderr);
+                           echo $stderr;
+                           File::delete($url_stderr);
+                       }
+
+                       $status = Status::COMPLETED;
+                       $record['node']->setStatus($status);
+                       $connection->manager->persist($record['node']);
+                       $connection->manager->flush();
+                       break;
+
+
+            }
+            echo $url_stdout . PHP_EOL;
+            echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
+            sleep(1);
+            $i++;
+            if($i > 5){
+                break;
+            }
+        }
+        */
     }
 
-    /*
-                $i = 0;
-                while(true){
-                    $command = 'ps -p ' . $proc_id;
-                    exec($command, $output, $code);
-                    if($code !== 0){
-                        //completed
-                        echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
-                        if(File::exist($url_stdout)){
-                            $stdout = File::read($url_stdout);
-                            echo $stdout;
-                           File::delete($url_stdout);
-                        }
-                        if(File::exist($url_stderr)){
-                            $stderr = File::read($url_stderr);
-                            echo $stderr;
-                            File::delete($url_stderr);
-                        }
-                        /*
-                        $status = Status::COMPLETED;
-                        $record['node']->setStatus($status);
-                        $connection->manager->persist($record['node']);
-                        $connection->manager->flush();
-                        break;
-                        */
-    /*
-        }
-        echo $url_stdout . PHP_EOL;
-        echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
-        sleep(1);
-        $i++;
-        if($i > 5){
-            break;
-        }
-    }
-    */
+
 
 }
 
