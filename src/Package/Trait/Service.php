@@ -228,6 +228,7 @@ trait Service {
      * @throws QueryException
      * @throws ObjectException
      * @throws Exception
+     * @throws ORMException
      */
     public function monitor(object $flags, object $options): void
     {
