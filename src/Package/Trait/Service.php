@@ -206,21 +206,32 @@ trait Service {
                 foreach($record['node']['command'] as $nr => $command){
                     $command = 'nohup '. $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &  echo $!';
                     exec($command, $output, $code);
-                    d($output);
-//                    echo $url_stdout . PHP_EOL;
-//                    echo $url_stderr . PHP_EOL;
-//                    echo $command . PHP_EOL;
+                    $proc_id = trim($output[0]);
                 }
                 $i = 0;
                 while(true){
+                    $command = 'ps -p ' . $proc_id;
+                    exec($command, $output, $code);
+                    if($code !== 0){
+                        //completed
+                        echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
+                        if(File::exist($url_stdout)){
+                            $stdout = File::read($url_stdout);
+                            echo $stdout;
+//                        File::delete($url_stdout);
+                        }
+                        /*
+                        $status = Status::COMPLETED;
+                        $record['node']->setStatus($status);
+                        $connection->manager->persist($record['node']);
+                        $connection->manager->flush();
+                        break;
+                        */
+                    }
                     echo $url_stdout . PHP_EOL;
                     echo 'File exist: ' . File::exist($url_stdout) . PHP_EOL;
 
-                    if(File::exist($url_stdout)){
-                        $stdout = File::read($url_stdout);
-                        echo $stdout;
-//                        File::delete($url_stdout);
-                    }
+
                     /*
                     if(File::exist($url_stderr)){
                         $stderr = File::read($url_stderr);
