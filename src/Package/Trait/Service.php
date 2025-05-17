@@ -214,7 +214,10 @@ trait Service {
         Dir::create($dir_stderr, Dir::CHMOD);
         $process_list = [];
         if(array_key_exists('node', $record)){
-            if(array_key_exists('command', $record['node'])){
+            if(
+                $record['node'] !== null &&
+                array_key_exists('command', $record['node'])
+            ){
                 $url_stdout = $dir_stdout . $record['node']['uuid'];
                 $url_stderr = $dir_stderr . $record['node']['uuid'];
                 foreach($record['node']['command'] as $nr => $command){
@@ -233,7 +236,6 @@ trait Service {
                 echo $command . PHP_EOL;
 
             }
-
         }
     }
 
