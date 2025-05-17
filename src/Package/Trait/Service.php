@@ -282,7 +282,6 @@ trait Service {
         $url_stdout = $dir_stdout . $record['node']['uuid'];
         $url_stderr = $dir_stderr . $record['node']['uuid'];
         $i = 0;
-        ddd($options->process);
         while(true){
             foreach($options->process as $proc_id){
                 $command = 'ps -p ' . $proc_id;
