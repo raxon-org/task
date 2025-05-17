@@ -187,7 +187,8 @@ trait Service {
                     'id' => $record['node']['id'],
                     'status' => Status::IN_PROGRESS,
                 ];
-                ddd($patch);
+                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                ddd($response);
             }
         }
         $dir_package = $object->config('ramdisk.url') .
