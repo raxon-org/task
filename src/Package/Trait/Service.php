@@ -292,7 +292,6 @@ trait Service {
             }
             if(!in_array(0, $process_active)) {
                 //completed
-                echo 'Process ' . $proc_id . ' not found' . PHP_EOL;
                 $patch = [
                     'id' => $record['node']['id'],
                     'status' => Status::COMPLETED,
