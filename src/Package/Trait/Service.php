@@ -5,6 +5,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
+use Package\Raxon\Task\Module\Status;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
 use Raxon\Doctrine\Module\Entity;
@@ -18,42 +19,13 @@ use Raxon\Node\Module\Node;
 trait Service {
 
     /**
-     * @throws Exception
-     */
-    public function execute(object $flags, object $options): array
-    {
-        $object = $this->object();
-        $config = Database::config($object);
-        if(!property_exists($options, 'environment')){
-            $options->environment = $object->config('framework.environment');
-        }
-        if(!property_exists($options, 'connection')){
-            $options->connection = 'system';
-        }
-        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
-        if($connection === null){
-            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
-        }
-        $connection->manager = Database::entity_manager($object, $config, $connection);
-        $entity = 'Task';
-        $node = new Node($object);
-        $role = $node->role_system();
-        $object->request('entity', $entity);
-        $object->request('filter.status', 'Pending');
-        $object->request('order.isCreated', 'ASC');
-        $object->request('limit', 1);
-        $list = Entity::list($object,$connection->manager, $role, $entity, $options);
-        return $list;
-    }
-
-    /**
      * @throws ObjectException
      * @throws FileWriteException
      * @throws ErrorException
      * @throws Exception
      * @throws ORMException
      */
-    public function task_create($flags, $options): void
+    public function create($flags, $options): void
     {
         $object = $this->object();
         $user_uuid = false;
@@ -138,13 +110,12 @@ trait Service {
             $task->setDescription($description);
             $task->setCommand($command);
             $task->setController($controller);
-            $task->setStatus('Pending');
+            $task->setStatus(Status::PENDING);
             $config = Database::config($object);
             $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
             if($connection === null){
                 $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
             }
-//            'name', 'environment'
             $connection->manager = Database::entity_manager($object, $config, $connection);
             $connection->manager->persist($task);
             $connection->manager->flush();
@@ -156,7 +127,7 @@ trait Service {
      * @throws ObjectException
      * @throws Exception
      */
-    public function task_list($flags, $options): array
+    public function list($flags, $options): array
     {
         $object = $this->object();
         $config = Database::config($object);
@@ -178,5 +149,36 @@ trait Service {
         return $list;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function execute(object $flags, object $options): array
+    {
+        $object = $this->object();
+        $config = Database::config($object);
+        if(!property_exists($options, 'environment')){
+            $options->environment = $object->config('framework.environment');
+        }
+        if(!property_exists($options, 'connection')){
+            $options->connection = 'system';
+        }
+        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+        if($connection === null){
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+        }
+        $connection->manager = Database::entity_manager($object, $config, $connection);
+        $entity = 'Task';
+        $node = new Node($object);
+        $role = $node->role_system();
+        $object->request('entity', $entity);
+        $object->request('filter.status', Status::PENDING);
+        $object->request('order.isCreated', 'ASC');
+
+        $record = Entity::record($object,$connection->manager, $role, $options);
+        ddd($record);
+        $object->request('limit', 1);
+        $list = Entity::list($object,$connection->manager, $role, $options);
+        return $list;
+    }
 }
 

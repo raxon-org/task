@@ -1,1 +1,1 @@
-{{Package.Raxon.Task:Main:task.create(flags(), options())}}
+{{Package.Raxon.Task:Service:create(flags(), options())}}
