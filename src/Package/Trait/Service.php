@@ -212,6 +212,8 @@ trait Service {
                 }
                 $i = 0;
                 while(true){
+                    echo $url_stdout . PHP_EOL;
+                    /*
                     if(File::exist($url_stdout)){
                         $stdout = File::read($url_stdout);
                         echo $stdout;
@@ -222,6 +224,7 @@ trait Service {
                         echo $stderr;
                         File::delete($url_stderr);
                     }
+                    */
                     sleep(1);
                     $i++;
                     if($i > 5){
