@@ -204,7 +204,7 @@ trait Service {
                 $url_stderr = $dir_stderr . $record['node']['uuid'];
                 foreach($record['node']['command'] as $nr => $command){
                     $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
-                    exec($command, $output, $code);
+                    exec($command . ' 2>&1', $output, $code);
                     echo implode(PHP_EOL, $output);
 //                    echo $url_stdout . PHP_EOL;
 //                    echo $url_stderr . PHP_EOL;
