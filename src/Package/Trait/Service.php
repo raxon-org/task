@@ -177,6 +177,7 @@ trait Service {
         $object->request('order.isCreated', 'ASC');
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection->manager, $role, $options);
+        d($record);
         if(array_key_exists('node', $record)){
             if(array_key_exists('id', $record['node'])){
                 $patch = [
