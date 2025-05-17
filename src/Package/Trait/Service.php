@@ -173,14 +173,12 @@ trait Service {
         $object->request('entity', $entity);
         $object->request('filter.status', Status::PENDING);
         $object->request('order.isCreated', 'ASC');
-        $object->request('page', 2);
+//        $object->request('page', 2); //test
 
 
         $record = Entity::record($object,$connection->manager, $role, $options);
         ddd($record);
-        $object->request('limit', 1);
-        $list = Entity::list($object,$connection->manager, $role, $options);
-        return $list;
+        return $record;
     }
 }
 
