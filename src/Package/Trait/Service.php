@@ -206,6 +206,7 @@ trait Service {
                 foreach($record['node']['command'] as $nr => $command){
                     $command = $command . ' > ' . $url_stdout . ' 2> ' . $url_stderr . ' &';
                     exec($command, $output, $code);
+                    d($output);
 //                    echo $url_stdout . PHP_EOL;
 //                    echo $url_stderr . PHP_EOL;
 //                    echo $command . PHP_EOL;
