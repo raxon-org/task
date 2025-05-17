@@ -177,6 +177,11 @@ trait Service {
         $object->request('order.isCreated', 'ASC');
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection->manager, $role, $options);
+        $patch = [
+            'id' => $record['node']['id'],
+            'status' => Status::IN_PROGRESS,
+        ];
+        ddd($patch);
         $dir_package = $object->config('ramdisk.url') .
             '0' .
             $object->config('ds') .
