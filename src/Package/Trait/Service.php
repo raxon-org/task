@@ -298,7 +298,7 @@ trait Service {
         ;
         $url_stdout = $dir_stdout . $record['node']['uuid'];
         $url_stderr = $dir_stderr . $record['node']['uuid'];
-        $i = 0;
+        $time_start = time();
         while(true){
             $process_active = [];
             foreach($options->process as $proc_id) {
@@ -307,7 +307,7 @@ trait Service {
                 $process_active[] = $code;
             }
             if(!in_array(0, $process_active)) {
-                //completed
+                //task completed
                 $patch = [
                     'id' => $record['node']['id'],
                     'status' => Status::COMPLETED,
@@ -323,19 +323,31 @@ trait Service {
                     File::delete($url_stderr);
                 }
                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                d($error);
-                ddd($response);
+                break;
             }
-            //process is running
+            //task is running
             usleep(5 * 1000);
-            $i++;
-            if($i > 50){
+            $time_current = time();
+            if($time_current - $time_start > 120 * 60 * 60){ // 2 hours time-out
+                //timeout
+                $patch = [
+                    'id' => $record['node']['id'],
+                    'status' => Status::ERROR,
+                ];
+                if(File::exist($url_stdout)){
+                    $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
+                    $patch['output'] = $stdout;
+                    File::delete($url_stdout);
+                }
+                if(File::exist($url_stderr)){
+                    $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
+                    $patch['notification'] = $stderr;
+                    File::delete($url_stderr);
+                }
+                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                 break;
             }
         }
     }
-
-
-
 }
 
