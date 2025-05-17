@@ -303,7 +303,8 @@ trait Service {
                         $patch['notification'] = $stderr;
                         File::delete($url_stderr);
                     }
-                    Entity::patch($object, $connection, $role, $patch);
+                    $response = Entity::patch($object, $connection, $role, $patch);
+                    ddd($response);
 
                     /*
                     $status = Status::COMPLETED;
