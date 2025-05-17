@@ -327,7 +327,7 @@ trait Service {
                 break;
             }
             //task is running
-            usleep(5 * 1000);
+            usleep(0.5 * 1000 * 1000);
             $time_current = time();
             if($time_current - $time_start > 120 * 60 * 60){ // 2 hours time-out
                 //timeout
