@@ -217,6 +217,11 @@ trait Service {
                         echo $stdout;
                         File::delete($url_stdout);
                     }
+                    if(File::exist($url_stdout)){
+                        $stderr = File::read($url_stderr);
+                        echo $stderr;
+                        File::delete($url_stderr);
+                    }
                     sleep(1);
                     $i++;
                     if($i > 5){
