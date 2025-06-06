@@ -1,3 +1,4 @@
-{{binary()}} {{$package}} create
-{{binary()}} {{$package}} list
-{{binary()}} {{$package}} setup
+{{$request = request()}}
+{{binary()}} {{$request.package}} create
+{{binary()}} {{$request.package}} list
+{{binary()}} {{$request.package}} setup
