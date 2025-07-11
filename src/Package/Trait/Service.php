@@ -36,8 +36,24 @@ trait Service {
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
         }
+        $config = Database::config($object);            
+        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+        if($connection === null){
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+        }
+        $connection->manager = Database::entity_manager($object, $config, $connection);
         if(App::is_cli()){
             if(property_exists($options, 'user')){
+                $repository = $connection->manager->getRepository('\\Entity\\User');
+                foreach($options->user as $property => $value){
+                    break;
+                }
+                $record = $repository->findOneBy([
+                    $property => $value                    
+                ]);
+                ddd($record);
+
+                /* through node
                 $class = 'Account.User';
                 $node = new Node($object);
                 $where_list = [];
@@ -55,11 +71,12 @@ trait Service {
                     'operator' => '>='
                 ];
                 $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-                if(array_key_exists('node', $record)){
+                if(is_array($record) && array_key_exists('node', $record)){
                     if(property_exists($record['node'], 'uuid')){
                         $user_uuid = $record['node']->uuid;
                     }
                 }
+                */
             }
             /*
             if(property_exists($options, 'host')){
@@ -112,13 +129,7 @@ trait Service {
             $task->setDescription($description);
             $task->setCommand($command);
             $task->setController($controller);
-            $task->setStatus(Status::PENDING);
-            $config = Database::config($object);
-            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
-            if($connection === null){
-                $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
-            }
-            $connection->manager = Database::entity_manager($object, $config, $connection);
+            $task->setStatus(Status::PENDING);            
             $connection->manager->persist($task);
             $connection->manager->flush();
         }
