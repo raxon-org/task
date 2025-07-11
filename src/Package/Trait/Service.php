@@ -9,6 +9,7 @@ use Package\Raxon\Task\Module\Status;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
 use Raxon\Doctrine\Module\Entity;
+use Raxon\Exception\AuthorizationException;
 use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
@@ -51,8 +52,16 @@ trait Service {
                 $record = $repository->findOneBy([
                     $property => $value                    
                 ]);
-                ddd($record);
-
+                if(empty($record->getIsActive())){                                        
+                    throw new AuthorizationException('Account is not active.');
+                }
+                if(!empty($record->getIsDeleted())){                    
+                    throw new AuthorizationException('Account is deleted.');
+                }
+                if(empty($record->getRole())){                    
+                    throw new AuthorizationException('Account has no roles.');
+                }
+                $user_uuid = $record->getUuid();                
                 /* through node
                 $class = 'Account.User';
                 $node = new Node($object);
@@ -120,7 +129,6 @@ trait Service {
                 }
             }
             */
-
             $description = $options->description ?? 'Task created by CLI';
             $command =  $options->command ?? [];
             $controller = $options->controller ?? [];
