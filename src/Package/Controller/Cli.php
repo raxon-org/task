@@ -22,8 +22,7 @@ class Cli extends Controller {
     const DIR = __DIR__ . '/';
     const MODULE_INFO = 'Info';
     const INFO = [
-        '{{binary()}} raxon/task                    | Task 2 (Object store) options',
-        '{{binary()}} raxon/task setup              | Task setup'
+        '{{binary()}} raxon/task                    | Task (Object store) options',        
     ];
 
     /**
