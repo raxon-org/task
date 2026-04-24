@@ -271,21 +271,34 @@ trait Service {
                             $destination->set('function', $route->function);
                             App::controller($object, $destination);
                             $controller = $destination->get('controller');
-                            ddd($controller);
                             $methods = get_class_methods($controller);
-
-
-
-                            $controller = Controller::name($object, $controller);
-                            ddd($controller);
+                            if(in_array($route->function, $methods, true)){
+                                $output = $controller->{$route->function}($object);
+                                $patch = [
+                                    'id' => $record['node']['id'],
+                                    'status' => Status::COMPLETED,
+                                ];
+                                if(is_array($record['node']['output'])){
+                                    $patch['output']= [];
+                                    foreach($record['node']['output'] as $output_line){
+                                        $patch['output'][] = $output_line;
+                                    }
+                                    $patch['output'][] = $output;
+                                } else {
+                                    $patch['output'] = $output;
+                                }
+                                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                            }
                         }
-                        $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
-                        foreach($process_list as $proc_id){
-                            $command .= ' -process[]=' . $proc_id;
+                        if(array_key_exists(0, $process_list)){
+                            $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                            foreach($process_list as $proc_id){
+                                $command .= ' -process[]=' . $proc_id;
+                            }
+                            $command .= ' -connection=' . $options->connection;
+                            $command .= ' -environment=' . $options->environment;
+                            exec($command, $output, $code);
                         }
-                        $command .= ' -connection=' . $options->connection;
-                        $command .= ' -environment=' . $options->environment;
-                        exec($command, $output, $code);
                     }
                 }
             }
