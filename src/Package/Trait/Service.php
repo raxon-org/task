@@ -13,6 +13,7 @@ use Raxon\Exception\AuthorizationException;
 use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
+use Raxon\Module\Controller;
 use Raxon\Module\Core;
 use Raxon\Module\Dir;
 use Raxon\Module\File;
@@ -258,6 +259,10 @@ trait Service {
                             exec($command, $output, $code);
                             $proc_id = trim($output[0]);
                             $process_list[] = $proc_id;
+                        }
+                        foreach($record['node']['controller'] as $nr => $controller){
+                            $controller = Controller::name($object, $controller);
+                            ddd($controller);
                         }
                         $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
                         foreach($process_list as $proc_id){
