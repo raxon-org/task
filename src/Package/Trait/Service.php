@@ -263,7 +263,7 @@ trait Service {
                         }
                         foreach($record['node']['controller'] as $nr => $controller){
                             $destination = new Destination();
-                            $destination-set('controller', $controller);
+                            $destination->set('controller', $controller);
                             App::controller($object, $destination);
                             $controller = $destination->get('controller');
                             ddd($controller);
