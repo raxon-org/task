@@ -273,7 +273,7 @@ trait Service {
                             $controller = $destination->get('controller');
                             $methods = get_class_methods($controller);
                             if(in_array($route->function, $methods, true)){
-                                $output = $controller->{$route->function}($object);
+                                $output = $controller::{$route->function}($object);
                                 $patch = [
                                     'id' => $record['node']['id'],
                                     'status' => Status::COMPLETED,
