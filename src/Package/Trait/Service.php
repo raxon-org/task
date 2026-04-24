@@ -291,6 +291,8 @@ trait Service {
                                     ];
                                 }
                                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                                d($response);
+                                d($error);
                             }
                         }
                         if(array_key_exists(0, $process_list)){
