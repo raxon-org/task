@@ -62,6 +62,6 @@
     {
       "name": "Task:rename",
       "#class": "Account.Permission"
-    }
+    },
   ]
 }
