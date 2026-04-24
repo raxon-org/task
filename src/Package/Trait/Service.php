@@ -286,6 +286,9 @@ trait Service {
                                     $patch['output'][] = $output;
                                 } else {
                                     $patch['output'] = $output;
+                                    $record['node']['output'] = [
+                                        $output,
+                                    ];
                                 }
                                 $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                             }
