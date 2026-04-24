@@ -15,6 +15,7 @@ use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
 use Raxon\Module\Controller;
 use Raxon\Module\Core;
+use Raxon\Module\Destination;
 use Raxon\Module\Dir;
 use Raxon\Module\File;
 use Raxon\Node\Module\Node;
@@ -261,6 +262,15 @@ trait Service {
                             $process_list[] = $proc_id;
                         }
                         foreach($record['node']['controller'] as $nr => $controller){
+                            $destination = new Destination();
+                            $destination-set('controller', $controller);
+                            App::controller($object, $destination);
+                            $controller = $destination->get('controller');
+                            ddd($controller);
+                            $methods = get_class_methods($controller);
+
+
+
                             $controller = Controller::name($object, $controller);
                             ddd($controller);
                         }
