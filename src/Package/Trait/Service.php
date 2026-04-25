@@ -241,7 +241,7 @@ trait Service {
                         $record_patch,
                         $role
                     );
-                    ddd($record_patch);
+                    $record['node'] = $record_patch;
                     $is_busy = true;
                 }
             }
