@@ -226,7 +226,22 @@ trait Service {
                     ];
                     //status IN_PROGRESS after 120 mins it should be set to ERROR
                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                    ddd($response);
+                    $expose = Entity::expose_get(
+                        $object,
+                        $entity,
+                        $entity . '.'. $options->function . '.output'
+                    );
+                    $record_patch = [];
+                    $record_patch = Entity::output(
+                        $object,
+                        $response,
+                        $expose,
+                        $entity,
+                        $options->function,
+                        $record_patch,
+                        $role
+                    );
+                    ddd($record_patch);
                     $is_busy = true;
                 }
             }
