@@ -317,7 +317,6 @@ trait Service {
                                 App::controller($object, $destination);
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
-                                ddd($destination);
                                 if(in_array($destination->get('function'), $methods, true)){
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
@@ -338,6 +337,15 @@ trait Service {
                                             $output,
                                         ];
                                     }
+                                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                                    d($response);
+                                    d($error);
+                                } else {
+                                    $patch = [
+                                        'id' => $record['node']['id'],
+                                        'status' => Status::COMPLETED,
+                                        'notification' => 'Controller function not found: ' . $destination->get('function') . ' in ' . $destination->get('controller')
+                                    ];
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     d($response);
                                     d($error);
