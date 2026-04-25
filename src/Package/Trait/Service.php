@@ -170,7 +170,7 @@ trait Service {
                 $response,
                 $role
             );
-            return Core::object($response, Core::JSON);
+            return Core::object($response, Core::JSON) . PHP_EOL;
         }
         return false;
     }
