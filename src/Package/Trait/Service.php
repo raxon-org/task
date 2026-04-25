@@ -318,9 +318,11 @@ trait Service {
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
                                 if(in_array($destination->get('function'), $methods, true)){
+                                    breakpoint('execute:');
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
                                     $output = $controller::{$route->function}($object);
+                                    breakpoint($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
