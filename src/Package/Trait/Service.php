@@ -152,7 +152,25 @@ trait Service {
             $task->setStatus(Status::PENDING);            
             $connection->manager->persist($task);
             $connection->manager->flush();
-            ddd($task);
+            $entity = 'Task';
+            $node = new Node($object);
+            $role = $node->role_system();
+            $expose = Entity::expose_get(
+                $object,
+                $entity,
+                $entity . '.'. __FUNCTION__ . '.output'
+            );
+            $response = [];
+            $response = Entity::output(
+                $object,
+                $task,
+                $expose,
+                $entity,
+                __FUNCTION__,,
+                $response,
+                $role
+            );
+            dd($response);
         }
     }
 
