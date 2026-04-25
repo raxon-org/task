@@ -166,7 +166,7 @@ trait Service {
                 $task,
                 $expose,
                 $entity,
-                __FUNCTION__,,
+                __FUNCTION__,
                 $response,
                 $role
             );
