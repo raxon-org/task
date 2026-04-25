@@ -221,7 +221,6 @@ trait Service {
                         'id' => $record['node']['id'],
                         'status' => Status::IN_PROGRESS,
                     ];
-                    ddd($record);
                     //status IN_PROGRESS after 120 mins it should be set to ERROR
                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                     $is_busy = true;
@@ -254,47 +253,55 @@ trait Service {
                 if(array_key_exists('node', $record)){
                     if(
                         $record['node'] !== null &&
-                        array_key_exists('command', $record['node'])
+                        (
+                            array_key_exists('command', $record['node']) ||
+                            array_key_exists('controller', $record['node'])
+                        )
                     ){
                         $url_stdout = $dir_stdout . $record['node']['uuid'];
                         $url_stderr = $dir_stderr . $record['node']['uuid'];
-                        foreach($record['node']['command'] as $nr => $command){
-                            $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
-                            exec($command, $output, $code);
-                            $proc_id = trim($output[0]);
-                            $process_list[] = $proc_id;
+                        if(array_key_exists('command', $record['node'])){
+                            foreach($record['node']['command'] as $nr => $command){
+                                $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
+                                exec($command, $output, $code);
+                                $proc_id = trim($output[0]);
+                                $process_list[] = $proc_id;
+                            }
                         }
-                        foreach($record['node']['controller'] as $nr => $controller){
-                            $destination = new Destination();
-                            $route = (object) ['controller' => $controller];;
-                            $route = Route::controller($route);
+                        if(array_key_exists('controller', $record['node'])){
+                            dd($record);
+                            foreach($record['node']['controller'] as $nr => $controller){
+                                $destination = new Destination();
+                                $route = (object) ['controller' => $controller];;
+                                $route = Route::controller($route);
 
-                            $destination->set('controller',  $route->controller);;
-                            $destination->set('function', $route->function);
-                            App::controller($object, $destination);
-                            $controller = $destination->get('controller');
-                            $methods = get_class_methods($controller);
-                            if(in_array($route->function, $methods, true)){
-                                $output = $controller::{$route->function}($object);
-                                $patch = [
-                                    'id' => $record['node']['id'],
-                                    'status' => Status::COMPLETED,
-                                ];
-                                if(is_array($record['node']['output'])){
-                                    $patch['output']= [];
-                                    foreach($record['node']['output'] as $output_line){
-                                        $patch['output'][] = $output_line;
-                                    }
-                                    $patch['output'][] = $output;
-                                } else {
-                                    $patch['output'] = $output;
-                                    $record['node']['output'] = [
-                                        $output,
+                                $destination->set('controller',  $route->controller);;
+                                $destination->set('function', $route->function);
+                                App::controller($object, $destination);
+                                $controller = $destination->get('controller');
+                                $methods = get_class_methods($controller);
+                                if(in_array($route->function, $methods, true)){
+                                    $output = $controller::{$route->function}($object);
+                                    $patch = [
+                                        'id' => $record['node']['id'],
+                                        'status' => Status::COMPLETED,
                                     ];
+                                    if(is_array($record['node']['output'])){
+                                        $patch['output']= [];
+                                        foreach($record['node']['output'] as $output_line){
+                                            $patch['output'][] = $output_line;
+                                        }
+                                        $patch['output'][] = $output;
+                                    } else {
+                                        $patch['output'] = $output;
+                                        $record['node']['output'] = [
+                                            $output,
+                                        ];
+                                    }
+                                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                                    d($response);
+                                    d($error);
                                 }
-                                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                                d($response);
-                                d($error);
                             }
                         }
                         if(array_key_exists(0, $process_list)){
