@@ -261,7 +261,6 @@ trait Service {
                         $role
                     );
                     $record['node'] = $record_patch;
-                    breakpoint($record);
                     $is_busy = true;
                 }
             }
@@ -318,7 +317,8 @@ trait Service {
                                 App::controller($object, $destination);
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
-                                if(in_array($route->function, $methods, true)){
+                                ddd($destination);
+                                if(in_array($destination->get('function'), $methods, true)){
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
                                     $output = $controller::{$route->function}($object);
