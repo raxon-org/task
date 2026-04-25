@@ -145,7 +145,6 @@ trait Service {
             }
 
             $task = new Task();
-            d($user_uuid);
             $task->setUser($user_uuid);
             $task->setDescription($description);
             $task->setCommand($command);
@@ -153,6 +152,7 @@ trait Service {
             $task->setStatus(Status::PENDING);            
             $connection->manager->persist($task);
             $connection->manager->flush();
+            ddd($task);
         }
     }
 
