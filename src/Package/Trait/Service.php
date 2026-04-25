@@ -144,6 +144,7 @@ trait Service {
             }
 
             $task = new Task();
+            d($user_uuid);
             $task->setUser($user_uuid);
             $task->setDescription($description);
             $task->setCommand($command);
