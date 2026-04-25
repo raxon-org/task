@@ -213,6 +213,7 @@ trait Service {
         while(true){
             $is_busy = false;
             $record = Entity::record($object,$connection->manager, $role, $options);
+            d($record);
             if(array_key_exists('node', $record)){
                 if(
                     $record['node'] !== null &&
