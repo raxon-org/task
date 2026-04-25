@@ -317,11 +317,12 @@ trait Service {
                                 App::controller($object, $destination);
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
-                                if(in_array($destination->get('function'), $methods, true)){
+                                $function = $destination->get('function');
+                                if(in_array($function, $methods, true)){
                                     breakpoint('execute:');
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
-                                    $output = $controller::{$route->function}($object);
+                                    $output = $controller::{$function}($object);
                                     breakpoint($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
