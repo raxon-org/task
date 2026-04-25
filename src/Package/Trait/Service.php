@@ -299,9 +299,8 @@ trait Service {
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
                                 if(in_array($route->function, $methods, true)){
+                                    $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
-
-
                                     $output = $controller::{$route->function}($object);
                                     $patch = [
                                         'id' => $record['node']['id'],
