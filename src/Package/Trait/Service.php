@@ -288,7 +288,6 @@ trait Service {
                             }
                         }
                         if(array_key_exists('controller', $record['node'])){
-                            dd($record);
                             foreach($record['node']['controller'] as $nr => $controller){
                                 $destination = new Destination();
                                 $route = (object) ['controller' => $controller];;
@@ -300,6 +299,9 @@ trait Service {
                                 $controller = $destination->get('controller');
                                 $methods = get_class_methods($controller);
                                 if(in_array($route->function, $methods, true)){
+                                    //need user for permissions...
+
+
                                     $output = $controller::{$route->function}($object);
                                     $patch = [
                                         'id' => $record['node']['id'],
