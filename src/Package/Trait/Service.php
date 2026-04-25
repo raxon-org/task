@@ -225,6 +225,7 @@ trait Service {
                     ];
                     //status IN_PROGRESS after 120 mins it should be set to ERROR
                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                    ddd($response);
                     $is_busy = true;
                 }
             }
