@@ -1,6 +1,7 @@
 <?php
 namespace Package\Raxon\Task\Trait;
 
+use DateTime;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
@@ -220,6 +221,7 @@ trait Service {
                     $patch = [
                         'id' => $record['node']['id'],
                         'status' => Status::IN_PROGRESS,
+                        'isUpdated' => new DateTime(),
                     ];
                     //status IN_PROGRESS after 120 mins it should be set to ERROR
                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
