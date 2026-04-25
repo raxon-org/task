@@ -32,7 +32,7 @@ trait Service {
      * @throws Exception
      * @throws ORMException
      */
-    public function create($flags, $options): void
+    public function create($flags, $options): bool | string
     {
         $object = $this->object();
         $user_uuid = false;
@@ -170,8 +170,9 @@ trait Service {
                 $response,
                 $role
             );
-            dd($response);
+            return Core::object($response, Core::JSON);
         }
+        return false;
     }
 
     /**
