@@ -57,7 +57,7 @@ trait Service {
                     break;
                 }
                 $record = $repository->findOneBy([
-                    $property => $value                    
+                    $property => $value
                 ]);
                 if(empty($record->getIsActive())){                                        
                     throw new AuthorizationException('Account is not active.');
@@ -209,7 +209,11 @@ trait Service {
      */
     public function execute(object $flags, object $options): void
     {
+        //Dir::create(/tmp/raxon/org/726ed3f2-896d-4241-bf26-0b69f2911f81/33/);
         $object = $this->object();
+        ddd($object->config('project.dir.temp'));
+//        Dir::create($object->config('project.dir.temp'));
+
         $config = Database::config($object);
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
