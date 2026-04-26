@@ -346,6 +346,7 @@ trait Service {
                                     }
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     breakpoint($response);
+                                    /*
                                     $expose = Entity::expose_get(
                                         $object,
                                         $entity,
@@ -361,6 +362,7 @@ trait Service {
                                         $record,
                                         $role_system
                                     );
+                                    */
                                     d($response);
                                     d($error);
                                 } else {
