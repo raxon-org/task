@@ -345,7 +345,7 @@ trait Service {
                                     $expose = Entity::expose_get(
                                         $object,
                                         $entity,
-                                        $entity . __FUNCTION__ . '.output'
+                                        $entity . '.patch.output'
                                     );
                                     $record = [];
                                     $record = Entity::output(
@@ -353,7 +353,7 @@ trait Service {
                                         $response,
                                         $expose,
                                         $entity,
-                                        __FUNCTION__,
+                                        'patch',
                                         $record,
                                         $role
                                     );
@@ -369,7 +369,7 @@ trait Service {
                                     $expose = Entity::expose_get(
                                         $object,
                                         $entity,
-                                        $entity . __FUNCTION__ . '.output'
+                                        $entity .'.patch.output'
                                     );
                                     $record = [];
                                     $record = Entity::output(
@@ -377,7 +377,7 @@ trait Service {
                                         $response,
                                         $expose,
                                         $entity,
-                                        __FUNCTION__,
+                                        'patch',
                                         $record,
                                         $role
                                     );
