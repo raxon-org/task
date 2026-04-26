@@ -345,6 +345,22 @@ trait Service {
                                         ];
                                     }
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                                    breakpoint($response);
+                                    $expose = Entity::expose_get(
+                                        $object,
+                                        $entity,
+                                        $entity . __FUNCTION__ . '.output'
+                                    );
+                                    $record = [];
+                                    $record = Entity::output(
+                                        $object,
+                                        $repository_record,
+                                        $expose,
+                                        $entity,
+                                        __FUNCTION__,
+                                        $record,
+                                        $role_system
+                                    );
                                     d($response);
                                     d($error);
                                 } else {
