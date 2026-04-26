@@ -357,8 +357,6 @@ trait Service {
                                         $record,
                                         $role
                                     );
-                                    breakpoint($record);
-                                    d($error);
                                 } else {
                                     $patch = [
                                         'id' => $record['node']['id'],
@@ -381,8 +379,6 @@ trait Service {
                                         $record,
                                         $role
                                     );
-                                    breakpoint($record);
-                                    d($error);
                                 }
                             }
                         }
