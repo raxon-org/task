@@ -325,7 +325,6 @@ trait Service {
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
                                     $output = $controller::{$function}($object);
-                                    breakpoint($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
@@ -343,8 +342,6 @@ trait Service {
                                         ];
                                     }
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                                    breakpoint($response);
-                                    /*
                                     $expose = Entity::expose_get(
                                         $object,
                                         $entity,
@@ -353,15 +350,14 @@ trait Service {
                                     $record = [];
                                     $record = Entity::output(
                                         $object,
-                                        $repository_record,
+                                        $response,
                                         $expose,
                                         $entity,
                                         __FUNCTION__,
                                         $record,
-                                        $role_system
+                                        $role
                                     );
-                                    */
-                                    d($response);
+                                    breakpoint($record);
                                     d($error);
                                 } else {
                                     $patch = [
