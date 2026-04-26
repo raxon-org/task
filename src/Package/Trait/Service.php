@@ -315,8 +315,6 @@ trait Service {
                                 $destination = new Destination();
                                 $route = (object) ['controller' => $controller];;
                                 $route = Route::controller($route);
-                                ddd($route);
-
                                 $destination->set('controller',  $route->controller);;
                                 $destination->set('function', $route->function);
                                 App::controller($object, $destination);
