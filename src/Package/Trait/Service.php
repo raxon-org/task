@@ -237,7 +237,6 @@ trait Service {
         while(true){
             $is_busy = false;
             $record = Entity::record($object,$connection->manager, $role, $options);
-            d($record);
             if(array_key_exists('node', $record)){
                 if(
                     $record['node'] !== null &&
@@ -270,7 +269,7 @@ trait Service {
                 }
             }
             if($is_busy === false){
-                sleep(5);
+                sleep(1);
             } else {
                 $dir_package = $object->config('ramdisk.url') .
                     '0' .
