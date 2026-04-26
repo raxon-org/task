@@ -322,7 +322,6 @@ trait Service {
                                 $methods = get_class_methods($controller);
                                 $function = $destination->get('function');
                                 if(in_array($function, $methods, true)){
-                                    breakpoint('execute:');
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
                                     $output = $controller::{$function}($object);
