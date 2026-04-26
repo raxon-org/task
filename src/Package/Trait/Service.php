@@ -209,9 +209,10 @@ trait Service {
      */
     public function execute(object $flags, object $options): void
     {
-        //Dir::create(/tmp/raxon/org/726ed3f2-896d-4241-bf26-0b69f2911f81/33/);
         $object = $this->object();
-        ddd($object->config('ramdisk.url'));
+        $dir_temp_user_www = $object->config('ramdisk.url') . '33/';
+        Dir::create($dir_temp_user_www, Dir::CHMOD);
+        File::chown($dir_temp_user_www, 'www-data', 'www-data');
 //        Dir::create($object->config('project.dir.temp'));
 
         $config = Database::config($object);
