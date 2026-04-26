@@ -366,7 +366,22 @@ trait Service {
                                         'notification' => 'Controller function not found: ' . $destination->get('function') . ' in ' . $destination->get('controller')
                                     ];
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                                    d($response);
+                                    $expose = Entity::expose_get(
+                                        $object,
+                                        $entity,
+                                        $entity . __FUNCTION__ . '.output'
+                                    );
+                                    $record = [];
+                                    $record = Entity::output(
+                                        $object,
+                                        $response,
+                                        $expose,
+                                        $entity,
+                                        __FUNCTION__,
+                                        $record,
+                                        $role
+                                    );
+                                    breakpoint($record);
                                     d($error);
                                 }
                             }
