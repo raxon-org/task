@@ -72,6 +72,42 @@
         }
       ]
     },
+    "patch" : {
+      "output" : [
+        {
+          "role" : "ROLE_SYSTEM",
+          "property" : [
+            "id",
+            "uuid",
+            "description",
+            "command",
+            "controller",
+            "user",
+            "output",
+            "notification",
+            "status",
+            "isCreated",
+            "isUpdated"
+          ]
+        },
+        {
+          "role" : "ROLE_ADMIN",
+          "property" : [
+            "id",
+            "uuid",
+            "description",
+            "command",
+            "controller",
+            "user",
+            "output",
+            "notification",
+            "status",
+            "isCreated",
+            "isUpdated"
+          ]
+        }
+      ]
+    },
     "update" : {
       "output" : [
         {
