@@ -332,6 +332,7 @@ trait Service {
                                         $object->request($key, $value);
                                     }
                                     $object->request('controller', $controller);
+                                    $object->request('function', $function);
                                     $output = $controller::{$function}($object);
                                     $patch = [
                                         'id' => $record['node']['id'],
