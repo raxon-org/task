@@ -139,6 +139,7 @@ trait Service {
             $description = $options->description ?? 'Task created by CLI';
             $command =  $options->command ?? [];
             $controller = $options->controller ?? [];
+            $request = $options->request ?? (object) [];
 
             if(empty($command) && empty($controller)){
                 throw new Exception('Command or controller is required');
@@ -146,6 +147,7 @@ trait Service {
 
             $task = new Task();
             $task->setUser($user_uuid);
+            $task->setRequest($request);
             $task->setDescription($description);
             $task->setCommand($command);
             $task->setController($controller);
