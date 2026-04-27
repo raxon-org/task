@@ -7,7 +7,6 @@ use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
 use Package\Raxon\Task\Module\Status;
-use Package\Raxon\Audio\Output\Filter\Stt\Segment;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
 use Raxon\Doctrine\Module\Entity;
