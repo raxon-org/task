@@ -19,6 +19,7 @@ use Raxon\Module\Core;
 use Raxon\Module\Destination;
 use Raxon\Module\Dir;
 use Raxon\Module\File;
+use Raxon\Module\OutputFilter;
 use Raxon\Module\Route;
 use Raxon\Node\Module\Node;
 
@@ -348,6 +349,30 @@ trait Service {
                                             $output,
                                         ];
                                     }
+                                    //outputfilter
+                                    $list = [
+                                        (object) [
+                                            "uuid" => Core::uuid(),
+                                            "options" => (object) [
+                                                "priority" => 10,
+                                                "command" => [],
+                                                "controller" => [
+                                                    "Package:Raxon:Audio:Output:Filter:Segment:filter"
+                                                ]
+                                            ],
+                                            "route" => "*",
+                                            "#class" => "System.Output.Filter"
+                                        ]
+                                    ];
+                                    OutputFilter::on($object, $list);
+                                    $patch['output'] = OutputFilter::trigger($object, $destination, [
+                                        'methods' => $methods,
+                                        'response' => $patch['output']
+                                    ]);
+                                    ddd($patch['output']);
+
+
+
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     $expose = Entity::expose_get(
                                         $object,
