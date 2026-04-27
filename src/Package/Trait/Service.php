@@ -172,7 +172,6 @@ trait Service {
                 $response,
                 $role
             );
-            ddd($response);
             return Core::object($response, Core::JSON) . PHP_EOL;
         }
         return false;
@@ -331,6 +330,7 @@ trait Service {
                                         $object->request($key, $value);
                                     }
                                     $output = $controller::{$function}($object);
+                                    ddd($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
@@ -347,6 +347,7 @@ trait Service {
                                             $output,
                                         ];
                                     }
+                                    dd($patch);
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     $expose = Entity::expose_get(
                                         $object,
