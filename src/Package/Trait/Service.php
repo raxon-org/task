@@ -368,7 +368,7 @@ trait Service {
                                         $record,
                                         $role
                                     );
-                                    d($record['status']);
+                                    d($record);
                                 } else {
                                     $patch = [
                                         'id' => $record['node']['id'],
