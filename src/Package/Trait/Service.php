@@ -339,7 +339,9 @@ trait Service {
                                         foreach($record['node']['output'] as $output_line){
                                             $patch['output'][] = $output_line;
                                         }
-                                        $patch['output'][] = $output;
+                                        foreach($output as $output_line){
+                                            $patch['output'][] = $output_line;
+                                        }
                                     } else {
                                         $patch['output'] = $output;
                                         $record['node']['output'] = [
