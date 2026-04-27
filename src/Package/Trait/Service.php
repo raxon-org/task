@@ -357,7 +357,7 @@ trait Service {
                                                 "priority" => 10,
                                                 "command" => [],
                                                 "controller" => [
-                                                    "Package:Raxon:Audio:Output:Filter:Segment:filter"
+                                                    "Package:Raxon:Audio:Output:Filter:Segment.filter"
                                                 ]
                                             ],
                                             "route" => "*",
