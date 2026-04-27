@@ -330,7 +330,6 @@ trait Service {
                                         $object->request($key, $value);
                                     }
                                     $output = $controller::{$function}($object);
-                                    ddd($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
