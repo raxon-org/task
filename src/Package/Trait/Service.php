@@ -352,11 +352,6 @@ trait Service {
                                             $output,
                                         ];
                                     }
-                                    //Segment::segment_filter($object, $destination, );
-                                    ddd($patch['output']);
-
-
-
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     $expose = Entity::expose_get(
                                         $object,
