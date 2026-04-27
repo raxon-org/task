@@ -47,6 +47,13 @@
               }
             },
             {
+              "name": "request",
+              "type": "json",
+              "options": {
+                "nullable": true
+              }
+            },
+            {
               "name": "output",
               "type": "json",
               "options": {
