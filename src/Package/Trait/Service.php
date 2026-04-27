@@ -331,6 +331,7 @@ trait Service {
                                     foreach($record['node']['request'] as $key => $value){
                                         $object->request($key, $value);
                                     }
+                                    $object->request('controller', $controller);
                                     $output = $controller::{$function}($object);
                                     $patch = [
                                         'id' => $record['node']['id'],
@@ -351,28 +352,6 @@ trait Service {
                                         ];
                                     }
                                     //Segment::segment_filter($object, $destination, );
-
-
-                                    //outputfilter
-                                    $list = [
-                                        (object) [
-                                            "uuid" => Core::uuid(),
-                                            "options" => (object) [
-                                                "priority" => 10,
-                                                "command" => [],
-                                                "controller" => [
-                                                    "Package:Raxon:Audio:Output:Filter:Stt:Segment:segment.filter"
-                                                ]
-                                            ],
-                                            "route" => "*",
-                                            "#class" => "System.Output.Filter"
-                                        ]
-                                    ];
-                                    OutputFilter::on($object, $list);
-                                    $patch['output'] = OutputFilter::trigger($object, $destination, [
-                                        'methods' => $methods,
-                                        'response' => $patch['output']
-                                    ]);
                                     ddd($patch['output']);
 
 
