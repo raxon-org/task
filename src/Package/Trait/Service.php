@@ -346,7 +346,6 @@ trait Service {
                                             $output,
                                         ];
                                     }
-                                    dd($patch);
                                     $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
                                     $expose = Entity::expose_get(
                                         $object,
