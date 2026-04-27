@@ -326,8 +326,11 @@ trait Service {
                                 if(in_array($function, $methods, true)){
                                     $object->request('user.uuid', $record['node']['user']);
                                     //need user for permissions...
-                                    ddd($record['node']);
+                                    foreach($record['node']['request'] as $key => $value){
+                                        $object->request($key, $value);
+                                    }
                                     $output = $controller::{$function}($object);
+                                    ddd($output);
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
