@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
 use Package\Raxon\Task\Module\Status;
-use Package\Raxon\Audio\Output\Filter\Segment;
+use Package\Raxon\Audio\Output\Filter\Stt\Segment;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
 use Raxon\Doctrine\Module\Entity;
@@ -339,10 +339,10 @@ trait Service {
                                     if(is_array($record['node']['output'])){
                                         $patch['output']= [];
                                         foreach($record['node']['output'] as $output_line){
-                                            $patch['output'][] = $output_line;
+                                            $patch['output'][] = $output_line; //maybe add  (object)
                                         }
                                         foreach($output as $output_line){
-                                            $patch['output'][] = $output_line;
+                                            $patch['output'][] = $output_line; //maybe add  (object)
                                         }
                                     } else {
                                         $patch['output'] = $output;
@@ -350,7 +350,7 @@ trait Service {
                                             $output,
                                         ];
                                     }
-                                    Segment::filter($object, $destination, );
+                                    //Segment::segment_filter($object, $destination, );
 
 
                                     //outputfilter
@@ -361,7 +361,7 @@ trait Service {
                                                 "priority" => 10,
                                                 "command" => [],
                                                 "controller" => [
-                                                    "Package:Raxon:Audio:Output:Filter:Segment.filter"
+                                                    "Package:Raxon:Audio:Output:Filter:Stt:Segment:segment.filter"
                                                 ]
                                             ],
                                             "route" => "*",
