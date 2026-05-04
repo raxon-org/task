@@ -224,7 +224,8 @@ trait Service {
             $response,
             $role
         );
-        return Core::object($response, Core::JSON) . PHP_EOL;
+        return $response;
+//        return Core::object($response, Core::JSON) . PHP_EOL;
     }
 
     /**
