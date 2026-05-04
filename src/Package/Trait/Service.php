@@ -183,6 +183,55 @@ trait Service {
      * @throws ObjectException
      * @throws Exception
      */
+    public function read($flags, $options): array
+    {
+        $object = $this->object();
+        $config = Database::config($object);
+        if(!property_exists($options, 'environment')){
+            $options->environment = $object->config('framework.environment');
+        }
+        if(!property_exists($options, 'connection')){
+            $options->connection = 'system';
+        }
+        if(!property_exists($options, 'uuid')){
+            throw new Exception('Options uuid not provided');
+        }
+        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
+        if($connection === null){
+            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
+        }
+        $connection->manager = Database::entity_manager($object, $config, $connection);
+        $uuid = $options->uuid ?? null;
+        $repository = $connection->manager->getRepository('\\Entity\\Task');
+        $task = $repository->findOneBy([
+            'uuid' => $uuid
+        ]);
+        $entity = 'Task';
+        $node = new Node($object);
+        $role = $node->role_system();
+        $expose = Entity::expose_get(
+            $object,
+            $entity,
+            $entity . '.'. __FUNCTION__ . '.output'
+        );
+        $response = [];
+        $response = Entity::output(
+            $object,
+            $task,
+            $expose,
+            $entity,
+            __FUNCTION__,
+            $response,
+            $role
+        );
+        return Core::object($response, Core::JSON) . PHP_EOL;
+    }
+
+    /**
+     * @throws QueryException
+     * @throws ObjectException
+     * @throws Exception
+     */
     public function list($flags, $options): array
     {
         $object = $this->object();
