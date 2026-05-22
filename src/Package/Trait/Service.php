@@ -357,7 +357,7 @@ trait Service {
                         $url_stderr = $dir_stderr . $record['node']['uuid'];
                         if(array_key_exists('command', $record['node'])){
                             foreach($record['node']['command'] as $nr => $command){
-                                $command = 'nohup cd / && '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
+                                $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
                                 exec($command, $output, $code);
                                 $proc_id = trim($output[0]);
                                 $process_list[] = $proc_id;
