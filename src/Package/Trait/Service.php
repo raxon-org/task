@@ -233,9 +233,17 @@ trait Service {
      * @throws ObjectException
      * @throws Exception
      */
-    public function list($flags, $options): array
+    public function list(object $flags, object $options): array
     {
         $object = $this->object();
+        if(property_exists($options, 'limit')){
+            $object->request('limit',  (int) $options->limit);
+            unset($options->limit);
+        }
+        if(property_exists($options, 'page')){
+            $object->request('page', (int) $options->page);
+            unset($options->page);
+        }
         $config = Database::config($object);
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
