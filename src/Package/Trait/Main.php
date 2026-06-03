@@ -33,7 +33,29 @@ trait Main {
         exec($command . ' 2>&1', $output, $code);
         echo implode(PHP_EOL, $output) . PHP_EOL;
 
-//        $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds');
+        $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds') . 'Cron.development';
+        if(File::exists($url)){
+            $read = File::read($url);
+            $read = explode(PHP_EOL, $read);
+            $is_found = false;
+            foreach($read as $nr => $line){
+                $line = trim($line);
+                if(stristr($line, 'raxon/task service execute') !== false){
+                    $is_found = $nr;
+                    break;
+                }
+            }
+            if($is_found === false){
+                $read[] = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1';
+                File::write($url, implode(PHP_EOL, $read));
+            }
+            $command = Core::binary($object) . ' raxon/basic cron restore';
+            exec($command . ' 2>&1', $output, $code);
+            echo implode(PHP_EOL, $output) . PHP_EOL;
+            $command = Core::binary($object) . ' raxon/basic cron restart';
+            exec($command . ' 2>&1', $output, $code);
+            echo implode(PHP_EOL, $output) . PHP_EOL;
+        }
 //
 //        $command = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1'
     }
