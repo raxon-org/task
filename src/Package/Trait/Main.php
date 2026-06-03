@@ -3,6 +3,7 @@ namespace Package\Raxon\Task\Trait;
 
 use Exception;
 use Raxon\Module\Core;
+use Raxon\Module\File;
 
 trait Main {
 
