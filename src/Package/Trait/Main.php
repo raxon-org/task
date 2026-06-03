@@ -32,8 +32,7 @@ trait Main {
         $command = Core::binary($object) . ' raxon/basic cron backup';
         exec($command . ' 2>&1', $output, $code);
         echo implode(PHP_EOL, $output) . PHP_EOL;
-        d($code);
-        
+
 //        $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds');
 //
 //        $command = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1'
