@@ -35,7 +35,7 @@ trait Main {
         echo implode(PHP_EOL, $output) . PHP_EOL;
 
         $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds') . 'Cron.development';
-        if(File::exists($url)){
+        if(File::exist($url)){
             $read = File::read($url);
             $read = explode(PHP_EOL, $read);
             $is_found = false;
