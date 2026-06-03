@@ -47,8 +47,8 @@ trait Main {
                 }
             }
             if($is_found === false){
-                $read[] = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1' . PHP_EOL;
-                File::write($url, implode(PHP_EOL, $read));
+                $read[] = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1';
+                File::write($url, implode(PHP_EOL, $read) . PHP_EOL);
             }
             $command = Core::binary($object) . ' raxon/basic cron restore';
             exec($command . ' 2>&1', $output, $code);
