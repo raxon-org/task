@@ -55,7 +55,6 @@ trait Service {
         if(App::is_cli()){
             if(property_exists($options, 'user')){
                 $repository = $connection->manager->getRepository('\\Entity\\User');
-                dd($options);
                 foreach($options->user as $property => $value){
                     break;
                 }
