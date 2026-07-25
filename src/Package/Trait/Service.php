@@ -57,11 +57,10 @@ trait Service {
                 foreach($options->user as $property => $value){
                     break;
                 }
-                d($property);
-                ddd($value);
                 $record = $repository->findOneBy([
                     $property => $value
                 ]);
+                ddd($record);
                 if(empty($record)){
                     throw new AuthorizationException('Account is not found.');
                 }
