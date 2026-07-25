@@ -60,7 +60,6 @@ trait Service {
                 $record = $repository->findOneBy([
                     $property => $value
                 ]);
-                ddd($record);
                 if(empty($record)){
                     throw new AuthorizationException('Account is not found.');
                 }
