@@ -6,7 +6,6 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
-use MongoDB\Driver\Exception\AuthenticationException;
 use Package\Raxon\Task\Module\Status;
 use Raxon\App;
 use Raxon\Doctrine\Module\Database;
@@ -62,7 +61,7 @@ trait Service {
                     $property => $value
                 ]);
                 if(empty($record)){
-                    throw new AuthenticationException('Account is not found.');
+                    throw new AuthorizationException('Account is not found.');
                 }
                 if(empty($record->getIsActive())){                                        
                     throw new AuthorizationException('Account is not active.');
