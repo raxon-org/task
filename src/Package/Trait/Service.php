@@ -98,9 +98,10 @@ trait Service {
      * @throws ObjectException
      * @throws Exception
      */
-    public function read($flags, $options): array
+    public function read($flags, $options): bool | array
     {
         $object = $this->object();
+        /*
         $config = Database::config($object);
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
@@ -116,7 +117,17 @@ trait Service {
             $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
         }
         $connection->manager = Database::entity_manager($object, $config, $connection);
+        */
         $uuid = $options->uuid ?? null;
+        $node = new Node($object);
+        $class = 'System.Task';
+        $role = $node->role_system();
+        $read = $node->read($class, $role, [
+            'uuid' => $uuid
+        ]);
+        ddd($read);
+        return false;
+        /*
         $repository = $connection->manager->getRepository('\\Entity\\Task');
         $task = $repository->findOneBy([
             'uuid' => $uuid
@@ -141,6 +152,7 @@ trait Service {
         );
         return $response;
 //        return Core::object($response, Core::JSON) . PHP_EOL;
+        */
     }
 
     /**
