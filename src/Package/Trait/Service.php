@@ -186,7 +186,7 @@ trait Service {
                 ){
                     $time = microtime(true);
                     $patch = (object) [
-                        'id' => $record['node']->uuid,
+                        'uuid' => $record['node']->uuid,
                         'status' => Status::IN_PROGRESS,
                         'is' => (object) [
                             'updated' => $time,
