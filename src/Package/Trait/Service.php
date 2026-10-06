@@ -304,8 +304,10 @@ trait Service {
                             foreach($process_list as $proc_id){
                                 $command .= ' -process[]=' . $proc_id;
                             }
+                            /*
                             $command .= ' -connection=' . $options->connection;
                             $command .= ' -environment=' . $options->environment;
+                            */
                             exec($command, $output, $code);
                         }
                     }
@@ -426,7 +428,7 @@ trait Service {
             if($time_current - $time_start > 120 * 60 * 60){ // 2 hours time-out
                 //timeout
                 $patch = [
-                    'id' => $record['node']['id'],
+                    'uuid' => $record['node']->uuid,
                     'status' => Status::ERROR,
                 ];
                 if(File::exist($url_stdout)){
