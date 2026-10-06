@@ -73,11 +73,10 @@ trait Service {
             $user_uuid = $record['node']->uuid ?? false;
         }
         if($user_uuid === false){
-            return false;
+            throw new Exception('User not found');
         }
         $class = 'System.Task';
         $time = microtime(true);
-
         $record = (object) [
             'user' => $user_uuid,
             'description' => $description,
@@ -91,11 +90,7 @@ trait Service {
                 'deleted' => null,
             ]
         ];
-        $response = $node->create($class, $node->role_system(), $record);
-        if($response !== false){
-            return Core::object($response, Core::JSON) . PHP_EOL;
-        }
-        return false;
+        return $node->create($class, $node->role_system(), $record);
     }
 
     /**
