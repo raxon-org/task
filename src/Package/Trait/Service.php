@@ -101,58 +101,13 @@ trait Service {
     public function read($flags, $options): bool | array
     {
         $object = $this->object();
-        /*
-        $config = Database::config($object);
-        if(!property_exists($options, 'environment')){
-            $options->environment = $object->config('framework.environment');
-        }
-        if(!property_exists($options, 'connection')){
-            $options->connection = 'system';
-        }
-        if(!property_exists($options, 'uuid')){
-            throw new Exception('Options uuid not provided');
-        }
-        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
-        if($connection === null){
-            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
-        }
-        $connection->manager = Database::entity_manager($object, $config, $connection);
-        */
         $uuid = $options->uuid ?? null;
         $node = new Node($object);
         $class = 'System.Task';
         $role = $node->role_system();
-        $read = $node->read($class, $role, [
+        return $node->read($class, $role, [
             'uuid' => $uuid
         ]);
-        ddd($read);
-        return false;
-        /*
-        $repository = $connection->manager->getRepository('\\Entity\\Task');
-        $task = $repository->findOneBy([
-            'uuid' => $uuid
-        ]);
-        $entity = 'Task';
-        $node = new Node($object);
-        $role = $node->role_system();
-        $expose = Entity::expose_get(
-            $object,
-            $entity,
-            $entity . '.'. __FUNCTION__ . '.output'
-        );
-        $response = [];
-        $response = Entity::output(
-            $object,
-            $task,
-            $expose,
-            $entity,
-            __FUNCTION__,
-            $response,
-            $role
-        );
-        return $response;
-//        return Core::object($response, Core::JSON) . PHP_EOL;
-        */
     }
 
     /**
@@ -160,7 +115,7 @@ trait Service {
      * @throws ObjectException
      * @throws Exception
      */
-    public function list(object $flags, object $options): array
+    public function list(object $flags, object $options): bool | array
     {
         $object = $this->object();
         if(property_exists($options, 'limit')){
@@ -171,24 +126,10 @@ trait Service {
             $object->request('page', (int) $options->page);
             unset($options->page);
         }
-        $config = Database::config($object);
-        if(!property_exists($options, 'environment')){
-            $options->environment = $object->config('framework.environment');
-        }
-        if(!property_exists($options, 'connection')){
-            $options->connection = 'system';
-        }
-        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
-        if($connection === null){
-            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
-        }
-        $connection->manager = Database::entity_manager($object, $config, $connection);
-        $entity = 'Task';
         $node = new Node($object);
+        $class = 'System.Task';
         $role = $node->role_system();
-        $object->request('entity', $entity);
-        $list = Entity::list($object,$connection->manager, $role, $options);
-        return $list;
+        return $node->list($class, $role, $options);
     }
 
     /**
