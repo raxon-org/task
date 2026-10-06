@@ -60,6 +60,17 @@ trait Setup {
             exec($command . ' 2>&1', $output, $code);
             echo implode(PHP_EOL, $output) . PHP_EOL;
         }
+        $command = 'app install raxon/account -patch';
+        $output = null;
+        Core::execute($object, $command, $output, $notification);
+        if($output){
+            echo $output;
+        }
+        if($notification){
+            echo $notification;
+        }
+
+
 //
 //        $command = '*/1 * * * *   root    /usr/bin/app raxon/task service execute >> /dev/null 2>&1'
     }
