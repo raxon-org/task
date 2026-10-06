@@ -1,16 +1,13 @@
 <?php
 namespace Package\Raxon\Task\Trait;
 
-use DateTime;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Query\QueryException;
 use Entity\Task;
 use Exception;
+use Package\Raxon\Account\Module\User;
 use Package\Raxon\Task\Module\Status;
 use Raxon\App;
-use Raxon\Doctrine\Module\Database;
-use Raxon\Doctrine\Module\Entity;
-use Raxon\Exception\AuthorizationException;
 use Raxon\Exception\ErrorException;
 use Raxon\Exception\FileWriteException;
 use Raxon\Exception\ObjectException;
@@ -26,12 +23,9 @@ use Raxon\Node\Module\Node;
 
 trait Service {
 
+
     /**
      * @throws ObjectException
-     * @throws FileWriteException
-     * @throws ErrorException
-     * @throws Exception
-     * @throws ORMException
      */
     public function create($flags, $options): bool | array
     {
@@ -72,8 +66,24 @@ trait Service {
                 'where' => $where_list,
                 'relation' => true
             ]);
-            ddd($record);
-            $user_uuid = $record['node']->uuid ?? false;
+            if(
+                is_array($record) &&
+                array_key_exists('node', $record) &&
+                property_exists($record['node'], 'uuid') &&
+                property_exists($record['node'], 'role') &&
+                is_array($record['node']->role)
+            ){
+                foreach($record['node']->role as $role){
+                    if(
+                        is_object($role) &&
+                        property_exists($role, 'name') &&
+                        $role->name === User::ROLE_ADMIN //only admin can create tasks
+                    ){
+                        $user_uuid = $record['node']->uuid ?? false;
+                        break;
+                    }
+                }
+            }
         }
         if($user_uuid === false){
             throw new Exception('User not found');
@@ -333,8 +343,9 @@ trait Service {
     public function monitor(object $flags, object $options): void
     {
         $object = $this->object();
-        $config = Database::config($object);
         /*
+        $config = Database::config($object);
+
         if(!property_exists($options, 'environment')){
             throw new Exception('Environment not found');
         }
