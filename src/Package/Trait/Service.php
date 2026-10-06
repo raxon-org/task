@@ -192,6 +192,7 @@ trait Service {
                             'updated' => $time,
                         ],
                     ];
+                    d($patch)
                     $response = $node->patch($class, $role, $patch);
                     dd($response);
                     $record['node'] = $response['node'] ?? false;
