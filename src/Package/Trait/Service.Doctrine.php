@@ -39,61 +39,6 @@ trait Service {
         $user_uuid = false;
 //        $host_uuid = false;
 //        $channel_uuid = false;
-
-        $description = $options->description ?? 'Task created by CLI';
-        $command =  $options->command ?? [];
-        $controller = $options->controller ?? [];
-        $request = $options->request ?? (object) [];
-
-        if(empty($command) && empty($controller)){
-            throw new Exception('Command or controller is required');
-        }
-        $node = new Node($object);
-        if(property_exists($options, 'user') && is_object($options->user)) {
-            $property = null;
-            $value = null;
-            foreach ($options->user as $property => $value) {
-                break;
-            }
-            $class = 'Account.User';
-            $where_list = [
-                [
-                    'value' => $value,
-                    'attribute' => $property,
-                    'operator' => '==='
-                ]
-            ];
-            $where_list[] = [
-                'value' => 1,
-                'attribute' => 'is.active',
-                'operator' => '>='
-            ];
-
-            $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-            $user_uuid = $record['node']->uuid ?? false;
-            ddd($record);
-        }
-        $class = 'System.Task';
-        $time = microtime(true);
-
-        $record = (object) [
-            'user' => $user_uuid,
-            'description' => $description,
-            'command' => $command,
-            'controller' => $controller,
-            'request' => $request,
-            'status' => Status::PENDING,
-            'is' => (object) [
-                'created' => $time,
-                'updated' => $time,
-                'deleted' => null,
-            ]
-        ];
-        $response = $node->create($class, $node->role_system(), $record);
-        d($response);
-
-
-        /*
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
         }
@@ -151,9 +96,9 @@ trait Service {
                         $user_uuid = $record['node']->uuid;
                     }
                 }
-
+                */
             }
-
+            /*
             if(property_exists($options, 'host')){
                 $class = 'System.Host';
                 $node = new Node($object);
@@ -195,7 +140,6 @@ trait Service {
                 }
             }
             */
-            /*
             $description = $options->description ?? 'Task created by CLI';
             $command =  $options->command ?? [];
             $controller = $options->controller ?? [];
@@ -233,10 +177,7 @@ trait Service {
                 $role
             );
             return Core::object($response, Core::JSON) . PHP_EOL;
-
         }
-        return false;
-            */
         return false;
     }
 

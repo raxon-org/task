@@ -5,7 +5,7 @@ use Exception;
 use Raxon\Module\Core;
 use Raxon\Module\File;
 
-trait Main {
+trait Setup {
 
     /**
      * @throws Exception
@@ -15,6 +15,7 @@ trait Main {
         Core::interactive();
         $object = $this->object();
         echo 'Install ' . $object->request('package') . '...' . PHP_EOL;
+        /*
         $schema_url = $object->config('project.dir.package') . 'Raxon/Task/Schema/Task.json';
         if(property_exists($options, 'connection')){
             $schema_connection = $options->connection;
@@ -30,11 +31,13 @@ trait Main {
         }
         exec($command . ' 2>&1', $output, $code);
         echo implode(PHP_EOL, $output) . PHP_EOL;
+        */
         $command = Core::binary($object) . ' raxon/basic cron backup';
         exec($command . ' 2>&1', $output, $code);
         echo implode(PHP_EOL, $output) . PHP_EOL;
 
-        $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds') . 'Cron.development';
+        $environment = $object->config('framework.environment') ?? 'development';
+        $url = $object->config('project.dir.data') . 'Cron' . $object->config('ds') . 'Cron.' . $environment;
         if(File::exist($url)){
             $read = File::read($url);
             $read = explode(PHP_EOL, $read);

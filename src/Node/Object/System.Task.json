@@ -1,0 +1,63 @@
+{
+    "Node": {
+        "#class": "System.Task",
+        "type": "object",
+        "property": [
+            {
+                "name": "description",
+                "type": "string"
+            },
+            {
+                "name": "command",
+                "type": "array"
+            },
+            {
+                "name": "controller",
+                "type": "array"
+            },
+            {
+                "name": "user",
+                "type": "string"
+            },
+            {
+              "name": "request",
+              "type": "object",
+              "property": [],
+              "multiple": false
+            },
+            {
+                "name": "output",
+                "type": "array"
+            },
+            {
+                "name": "notification",
+                "type": "array"
+            },
+            {
+                "name": "status",
+                "type": "array"
+            },
+            {
+                "name": "is",
+                "type": "object",
+                "property": [
+                  "created",
+                  "updated",
+                  "deleted"
+                ],
+                "multiple": false
+            },
+            {
+                "name": "uuid",
+                "type": "uuid"
+            },
+            {
+                "name": "#class",
+                "type": "string"
+            }
+        ]
+    },
+    "is.unique": [
+      "uuid"
+    ]
+}
