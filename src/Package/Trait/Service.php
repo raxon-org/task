@@ -178,6 +178,7 @@ trait Service {
         while(true){
             $is_busy = false;
             $record = $node->record($class, $role, $options_execute);
+            ddd($record);
             //$record = Entity::record($object,$connection, $role, $options);
             if(array_key_exists('node', $record)){
                 if(
