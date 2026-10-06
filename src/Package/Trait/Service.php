@@ -71,7 +71,6 @@ trait Service {
 
             $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
             $user_uuid = $record['node']->uuid ?? false;
-            ddd($record);
         }
         $class = 'System.Task';
         $time = microtime(true);
