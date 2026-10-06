@@ -64,6 +64,14 @@
       "#class": "Account.Permission"
     },
     {
+      "name": "Task:record",
+      "#class": "Account.Permission"
+    },
+    {
+      "name": "System:Task:record",
+      "#class": "Account.Permission"
+    },
+    {
       "name": "System:Task:import",
       "#class": "Account.Permission"
     },
