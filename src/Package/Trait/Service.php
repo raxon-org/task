@@ -228,22 +228,28 @@ trait Service {
                     if(
                         $record['node'] !== null &&
                         (
-                            array_key_exists('command', $record['node']) ||
-                            array_key_exists('controller', $record['node'])
+                            property_exists($record['node'], 'command') ||
+                            property_exists($record['node'], 'controller')
                         )
                     ){
                         $url_stdout = $dir_stdout . $record['node']->uuid;
                         $url_stderr = $dir_stderr . $record['node']->uuid;
-                        if(array_key_exists('command', $record['node'])){
-                            foreach($record['node']['command'] as $nr => $command){
+                        if(
+                            property_exists($record['node'], 'command') &&
+                            is_array($record['node']->command)
+                        ){
+                            foreach($record['node']->command as $nr => $command){
                                 $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
                                 exec($command, $output, $code);
                                 $proc_id = trim($output[0]);
                                 $process_list[] = $proc_id;
                             }
                         }
-                        if(array_key_exists('controller', $record['node'])){
-                            foreach($record['node']['controller'] as $nr => $controller){
+                        if(
+                            property_exists($record['node'], 'controller') &&
+                            is_array($record['node']->controller)
+                        ){
+                            foreach($record['node']->controller as $nr => $controller){
                                 $destination = new Destination();
                                 $route = (object) ['controller' => $controller];;
                                 $route = Route::controller($route);
