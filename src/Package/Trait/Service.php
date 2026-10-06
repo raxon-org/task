@@ -68,8 +68,11 @@ trait Service {
                 'attribute' => 'is.active',
                 'operator' => '>='
             ];
-
-            $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
+            $record = $node->record($class, $node->role_system(), [
+                'where' => $where_list,
+                'relation' => true
+            ]);
+            ddd($record);
             $user_uuid = $record['node']->uuid ?? false;
         }
         if($user_uuid === false){
