@@ -119,12 +119,12 @@ trait Service {
     {
         $object = $this->object();
         if(property_exists($options, 'limit')){
-            $object->request('limit',  (int) $options->limit);
-            unset($options->limit);
+            //$object->request('limit',  (int) $options->limit);
+            $options->limit = (int) $options->limit;
         }
         if(property_exists($options, 'page')){
-            $object->request('page', (int) $options->page);
-            unset($options->page);
+            //$object->request('page', (int) $options->page);
+            $options->page = (int) $options->page;
         }
         $node = new Node($object);
         $class = 'System.Task';
