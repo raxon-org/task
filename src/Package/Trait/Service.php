@@ -72,6 +72,9 @@ trait Service {
             $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
             $user_uuid = $record['node']->uuid ?? false;
         }
+        if($user_uuid === false){
+            return false;
+        }
         $class = 'System.Task';
         $time = microtime(true);
 
@@ -89,153 +92,9 @@ trait Service {
             ]
         ];
         $response = $node->create($class, $node->role_system(), $record);
-        d($response);
-
-
-        /*
-        if(!property_exists($options, 'environment')){
-            $options->environment = $object->config('framework.environment');
-        }
-        if(!property_exists($options, 'connection')){
-            $options->connection = 'system';
-        }
-        $config = Database::config($object);            
-        $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
-        if($connection === null){
-            $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
-        }
-        $connection->manager = Database::entity_manager($object, $config, $connection);
-        if(App::is_cli()){
-            if(property_exists($options, 'user')){
-                $repository = $connection->manager->getRepository('\\Entity\\User');
-                foreach($options->user as $property => $value){
-                    break;
-                }
-                $record = $repository->findOneBy([
-                    $property => $value
-                ]);
-                if(empty($record)){
-                    throw new AuthorizationException('Account is not found.');
-                }
-                if(empty($record->getIsActive())){                                        
-                    throw new AuthorizationException('Account is not active.');
-                }
-                if(!empty($record->getIsDeleted())){                    
-                    throw new AuthorizationException('Account is deleted.');
-                }
-                if(empty($record->getRole())){                    
-                    throw new AuthorizationException('Account has no roles.');
-                }
-                $user_uuid = $record->getUuid();                
-                /* through node
-                $class = 'Account.User';
-                $node = new Node($object);
-                $where_list = [];
-                foreach($options->user as $property => $value){
-                    $where = [
-                        'value' => $value,
-                        'attribute' => $property,
-                        'operator' => '==='
-                    ];
-                    $where_list[] = $where;
-                }
-                $where_list[] = [
-                    'value' => 1,
-                    'attribute' => 'is.active',
-                    'operator' => '>='
-                ];
-                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-                if(is_array($record) && array_key_exists('node', $record)){
-                    if(property_exists($record['node'], 'uuid')){
-                        $user_uuid = $record['node']->uuid;
-                    }
-                }
-
-            }
-
-            if(property_exists($options, 'host')){
-                $class = 'System.Host';
-                $node = new Node($object);
-                $where_list = [];
-                foreach($options->host as $property => $value){
-                    $where = [
-                        'value' => $value,
-                        'attribute' => $property,
-                        'operator' => '==='
-                    ];
-                    $where_list[] = $where;
-                }
-                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-                if(array_key_exists('node', $record)){
-                    if(property_exists($record['node'], 'uuid')){
-                        $host_uuid = $record['node']->uuid;
-                    }
-                }
-            }
-            */
-            /*
-            if(property_exists($options, 'channel')){
-                $class = 'System.Channel';
-                $node = new Node($object);
-                $where_list = [];
-                foreach($options->channel as $property => $value){
-                    $where = [
-                        'value' => $value,
-                        'attribute' => $property,
-                        'operator' => '==='
-                    ];
-                    $where_list[] = $where;
-                }
-                $record = $node->record($class, $node->role_system(), ['where' => $where_list]);
-                if(array_key_exists('node', $record)){
-                    if(property_exists($record['node'], 'uuid')){
-                        $channel_uuid = $record['node']->uuid;
-                    }
-                }
-            }
-            */
-            /*
-            $description = $options->description ?? 'Task created by CLI';
-            $command =  $options->command ?? [];
-            $controller = $options->controller ?? [];
-            $request = $options->request ?? (object) [];
-
-            if(empty($command) && empty($controller)){
-                throw new Exception('Command or controller is required');
-            }
-
-            $task = new Task();
-            $task->setUser($user_uuid);
-            $task->setRequest($request);
-            $task->setDescription($description);
-            $task->setCommand($command);
-            $task->setController($controller);
-            $task->setStatus(Status::PENDING);            
-            $connection->manager->persist($task);
-            $connection->manager->flush();
-            $entity = 'Task';
-            $node = new Node($object);
-            $role = $node->role_system();
-            $expose = Entity::expose_get(
-                $object,
-                $entity,
-                $entity . '.'. __FUNCTION__ . '.output'
-            );
-            $response = [];
-            $response = Entity::output(
-                $object,
-                $task,
-                $expose,
-                $entity,
-                __FUNCTION__,
-                $response,
-                $role
-            );
+        if($response !== false){
             return Core::object($response, Core::JSON) . PHP_EOL;
-
         }
-        return false;
-            */
         return false;
     }
 
