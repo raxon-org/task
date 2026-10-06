@@ -179,7 +179,7 @@ trait Service {
             $is_busy = false;
             $record = $node->record($class, $role, $options_execute);
             //$record = Entity::record($object,$connection, $role, $options);
-            if(array_key_exists('node', $record)){
+            if(is_array($record) && array_key_exists('node', $record)){
                 if(
                     $record['node'] !== null &&
                     property_exists($record['node'], 'uuid')
