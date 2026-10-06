@@ -192,16 +192,17 @@ trait Service {
                             'updated' => $time,
                         ],
                     ];
-                    d($patch);
                     $response = $node->patch($class, $role, $patch);
-                    dd($response);
-                    $record['node'] = $response['node'] ?? false;
-                    $is_busy = true;
+                    $record['node'] = $response['node'] ?? null;
+                    if($record['node'] !== null){
+                        $is_busy = true;
+                    }
                 }
             }
             if($is_busy === false){
                 sleep(1);
-            } else {
+            }
+            elseif($record['node'] !== null) {
                 $dir_package = $object->config('ramdisk.url') .
                     '0' .
                     $object->config('ds') .
@@ -262,7 +263,7 @@ trait Service {
                                     $object->request('function', $function);
                                     $output = $controller::{$function}($object);
                                     $patch = (object)[
-                                        'id' => $record['node']->uuid,
+                                        'uuid' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
                                     ];
                                     if(is_array($record['node']->output)){
@@ -283,7 +284,7 @@ trait Service {
                                     $record['node'] = $response['node'] ?? false;
                                 } else {
                                     $patch = [
-                                        'id' => $record['node']['id'],
+                                        'uuid' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
                                         'notification' => 'Controller function not found: ' . $destination->get('function') . ' in ' . $destination->get('controller')
                                     ];
@@ -293,7 +294,7 @@ trait Service {
                             }
                         }
                         if(array_key_exists(0, $process_list)){
-                            $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']['uuid'];
+                            $command = 'nohup ' . Core::binary($object) . ' raxon/task service monitor -task.uuid=' . $record['node']->uuid;
                             foreach($process_list as $proc_id){
                                 $command .= ' -process[]=' . $proc_id;
                             }
