@@ -143,7 +143,7 @@ trait Service {
         Dir::create($dir_temp_user_www, Dir::CHMOD);
         File::chown($dir_temp_user_www, 'www-data', 'www-data');
 //        Dir::create($object->config('project.dir.temp'));
-
+        /*
         $config = Database::config($object);
         if(!property_exists($options, 'environment')){
             $options->environment = $object->config('framework.environment');
@@ -157,15 +157,29 @@ trait Service {
         }
         $connection->manager = Database::entity_manager($object, $config, $connection);
         $entity = 'Task';
+        */
         $node = new Node($object);
+        $class = 'System.Task';
         $role = $node->role_system();
-        $object->request('entity', $entity);
-        $object->request('filter.status', Status::PENDING);
-        $object->request('order.isCreated', 'ASC');
+
+        $options_execute = (object) [
+            'filter' => (object) [
+                'status' => Status::PENDING,
+            ],
+            'order' => (object) [
+                'is' => (object) [
+                    'created' => 'ASC',
+                ]
+            ]
+        ];
+//        $object->request('filter.status', Status::PENDING);
+//        $object->request('order.isCreated', 'ASC');
         $time_start = time();
         while(true){
             $is_busy = false;
-            $record = Entity::record($object,$connection, $role, $options);
+            $record = $node->record($class, $role, $options);
+            ddd($record);
+            //$record = Entity::record($object,$connection, $role, $options);
             if(array_key_exists('node', $record)){
                 if(
                     $record['node'] !== null &&
