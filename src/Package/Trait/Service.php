@@ -33,7 +33,7 @@ trait Service {
      * @throws Exception
      * @throws ORMException
      */
-    public function create($flags, $options): bool | string
+    public function create($flags, $options): bool | array
     {
         $object = $this->object();
         $user_uuid = false;
