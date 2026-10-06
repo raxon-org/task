@@ -178,36 +178,22 @@ trait Service {
         while(true){
             $is_busy = false;
             $record = $node->record($class, $role, $options_execute);
-            ddd($record);
             //$record = Entity::record($object,$connection, $role, $options);
             if(array_key_exists('node', $record)){
                 if(
                     $record['node'] !== null &&
-                    array_key_exists('id', $record['node'])
+                    property_exists($record['node'], 'uuid')
                 ){
-                    $patch = [
-                        'id' => $record['node']['id'],
+                    $time = microtime(true);
+                    $patch = (object) [
+                        'id' => $record['node']->uuid,
                         'status' => Status::IN_PROGRESS,
-                        'isUpdated' => new DateTime(),
+                        'is' => (object) [
+                            'updated' => $time,
+                        ],
                     ];
-                    //status IN_PROGRESS after 120 mins it should be set to ERROR
-                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                    $expose = Entity::expose_get(
-                        $object,
-                        $entity,
-                        $entity . '.'. $options->function . '.output'
-                    );
-                    $record_patch = [];
-                    $record_patch = Entity::output(
-                        $object,
-                        $response,
-                        $expose,
-                        $entity,
-                        $options->function,
-                        $record_patch,
-                        $role
-                    );
-                    $record['node'] = $record_patch;
+                    $response = $node->patch($class, $role, $patch);
+                    $record['node'] = $response['node'] ?? false;
                     $is_busy = true;
                 }
             }
@@ -243,8 +229,8 @@ trait Service {
                             array_key_exists('controller', $record['node'])
                         )
                     ){
-                        $url_stdout = $dir_stdout . $record['node']['uuid'];
-                        $url_stderr = $dir_stderr . $record['node']['uuid'];
+                        $url_stdout = $dir_stdout . $record['node']->uuid;
+                        $url_stderr = $dir_stderr . $record['node']->uuid;
                         if(array_key_exists('command', $record['node'])){
                             foreach($record['node']['command'] as $nr => $command){
                                 $command = 'nohup '. $command . ' >> ' . $url_stdout . ' 2>> ' . $url_stderr . ' &  echo $!';
@@ -265,7 +251,7 @@ trait Service {
                                 $methods = get_class_methods($controller);
                                 $function = $destination->get('function');
                                 if(in_array($function, $methods, true)){
-                                    $object->request('user.uuid', $record['node']['user']);
+                                    $object->request('user.uuid', $record['node']->user);
                                     //need user for permissions...
                                     foreach($record['node']['request'] as $key => $value){
                                         $object->request($key, $value);
@@ -273,13 +259,13 @@ trait Service {
                                     $object->request('controller', $controller);
                                     $object->request('function', $function);
                                     $output = $controller::{$function}($object);
-                                    $patch = [
-                                        'id' => $record['node']['id'],
+                                    $patch = (object)[
+                                        'id' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
                                     ];
-                                    if(is_array($record['node']['output'])){
+                                    if(is_array($record['node']->output)){
                                         $patch['output']= [];
-                                        foreach($record['node']['output'] as $output_line){
+                                        foreach($record['node']->output as $output_line){
                                             $patch['output'][] = $output_line; //maybe add  (object)
                                         }
                                         foreach($output as $output_line){
@@ -287,48 +273,20 @@ trait Service {
                                         }
                                     } else {
                                         $patch['output'] = $output;
-                                        $record['node']['output'] = [
+                                        $record['node']->output = [
                                             $output,
                                         ];
                                     }
-                                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                                    $expose = Entity::expose_get(
-                                        $object,
-                                        $entity,
-                                        $entity . '.patch.output'
-                                    );
-                                    $record = [];
-                                    $record = Entity::output(
-                                        $object,
-                                        $response,
-                                        $expose,
-                                        $entity,
-                                        'patch',
-                                        $record,
-                                        $role
-                                    );
+                                    $response = $node->patch($class, $role, (object) $patch);
+                                    $record['node'] = $response['node'] ?? false;
                                 } else {
                                     $patch = [
                                         'id' => $record['node']['id'],
                                         'status' => Status::COMPLETED,
                                         'notification' => 'Controller function not found: ' . $destination->get('function') . ' in ' . $destination->get('controller')
                                     ];
-                                    $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
-                                    $expose = Entity::expose_get(
-                                        $object,
-                                        $entity,
-                                        $entity .'.patch.output'
-                                    );
-                                    $record = [];
-                                    $record = Entity::output(
-                                        $object,
-                                        $response,
-                                        $expose,
-                                        $entity,
-                                        'patch',
-                                        $record,
-                                        $role
-                                    );
+                                    $response = $node->patch($class, $role, (object) $patch);
+                                    $record['node'] = $response['node'] ?? false;
                                 }
                             }
                         }
@@ -362,12 +320,14 @@ trait Service {
     {
         $object = $this->object();
         $config = Database::config($object);
+        /*
         if(!property_exists($options, 'environment')){
             throw new Exception('Environment not found');
         }
         if(!property_exists($options, 'connection')){
             throw new Exception('Connection not found');
         }
+        */
         if(!property_exists($options, 'task')){
             throw new Exception('Task UUID not found');
         }
@@ -377,18 +337,32 @@ trait Service {
         if(!property_exists($options, 'process')){
             throw new Exception('Process ID not found');
         }
+        if(!is_array($options->process)){
+            $options->process = [$options->process];
+        }
+        /*
         $connection = $object->config('doctrine.environment.' . $options->connection . '.' . $options->environment);
         if($connection === null){
             $connection = $object->config('doctrine.environment.' . $options->connection . '.' . '*');
         }
         $connection->manager = Database::entity_manager($object, $config, $connection);
         $entity = 'Task';
+        */
+        $class = 'System.Task';
         $node = new Node($object);
         $role = $node->role_system();
+        $record_options = (object) [
+            'filter' => (object) [
+                'uuid' => $options->task->uuid,
+            ]
+        ];
+        $record = $node->record($class, $role, $record_options);
+        /*
         $object->request('entity', $entity);
         $object->request('filter.uuid', $options->task->uuid);
 //        $object->request('page', 2); //test
         $record = Entity::record($object,$connection, $role, $options);
+        */
         $dir_package = $object->config('ramdisk.url') .
             '0' .
             $object->config('ds') .
@@ -408,8 +382,8 @@ trait Service {
             'stderr' .
             $object->config('ds')
         ;
-        $url_stdout = $dir_stdout . $record['node']['uuid'];
-        $url_stderr = $dir_stderr . $record['node']['uuid'];
+        $url_stdout = $dir_stdout . $record['node']->uuid;
+        $url_stderr = $dir_stderr . $record['node']->uuid;
         $time_start = time();
         while(true){
             $process_active = [];
@@ -421,7 +395,7 @@ trait Service {
             if(!in_array(0, $process_active)) {
                 //task completed
                 $patch = [
-                    'id' => $record['node']['id'],
+                    'uuid' => $record['node']->uuid,
                     'status' => Status::COMPLETED,
                 ];
                 if(File::exist($url_stdout)){
@@ -434,7 +408,7 @@ trait Service {
                     $patch['notification'] = $stderr;
                     File::delete($url_stderr);
                 }
-                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                $response = $node->patch($class, $role, (object) $patch);
                 break;
             }
             //task is running
@@ -456,12 +430,12 @@ trait Service {
                     $patch['notification'] = $stderr;
                     File::delete($url_stderr);
                 }
-                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                $response = $node->patch($class, $role, (object) $patch);
                 break;
             } else {
                 //updates the task output / notification every half a second.
                 $patch = [
-                    'id' => $record['node']['id'],
+                    'uuid' => $record['node']->uuid,
                 ];
                 if(File::exist($url_stdout)){
                     $stdout = File::read($url_stdout, ['return' => File::ARRAY]);
@@ -471,7 +445,7 @@ trait Service {
                     $stderr = File::read($url_stderr, ['return' => File::ARRAY]);
                     $patch['notification'] = $stderr;
                 }
-                $response = Entity::patch($object, $connection, $role, (object) $patch, $error);
+                $response = $node->patch($class, $role, (object) $patch);
             }
         }
     }
