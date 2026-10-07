@@ -283,9 +283,6 @@ trait Service {
                                     $object->request('controller', $controller);
                                     $object->request('function', $function);
                                     $output = $controller::{$function}($object);
-                                    d($controller);
-                                    d($function);
-                                    d($output);
                                     $patch = (object)[
                                         'uuid' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
@@ -300,16 +297,12 @@ trait Service {
                                                 $patch->output[] = $output_line; //maybe add  (object)
                                             }
                                         } else {
-                                            $patch->output[] = [$output];
-                                            $record['node']->output = [
-                                                $output,
-                                            ];
+                                            $patch->output = $output;
+                                            $record['node']->output = $output;
                                         }
                                     } else {
-                                        $patch->output[] = [$output];
-                                        $record['node']->output = [
-                                            $output,
-                                        ];
+                                        $patch->output = $output;
+                                        $record['node']->output = $output;
                                     }
                                     $response = $node->patch($class, $role, (object) $patch);
                                     $record['node'] = $response['node'] ?? false;
