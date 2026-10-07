@@ -283,6 +283,7 @@ trait Service {
                                     $object->request('controller', $controller);
                                     $object->request('function', $function);
                                     $output = $controller::{$function}($object);
+                                    d($output);
                                     $patch = (object)[
                                         'uuid' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
