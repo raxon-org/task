@@ -287,23 +287,23 @@ trait Service {
                                         'uuid' => $record['node']->uuid,
                                         'status' => Status::COMPLETED,
                                     ];
-                                    $patch['output']= [];
+                                    $patch->output= [];
                                     if(property_exists($record['node'], 'output')){
                                         if(is_array($record['node']->output)){
                                             foreach($record['node']->output as $output_line){
-                                                $patch['output'][] = $output_line; //maybe add  (object)
+                                                $patch->output[] = $output_line; //maybe add  (object)
                                             }
                                             foreach($output as $output_line){
-                                                $patch['output'][] = $output_line; //maybe add  (object)
+                                                $patch->output[] = $output_line; //maybe add  (object)
                                             }
                                         } else {
-                                            $patch['output'][] = [$output];
+                                            $patch->output[] = [$output];
                                             $record['node']->output = [
                                                 $output,
                                             ];
                                         }
                                     } else {
-                                        $patch['output'][] = [$output];
+                                        $patch->output[] = [$output];
                                         $record['node']->output = [
                                             $output,
                                         ];
