@@ -275,8 +275,10 @@ trait Service {
                                 if(in_array($function, $methods, true)){
                                     $object->request('user.uuid', $record['node']->user);
                                     //need user for permissions...
-                                    foreach($record['node']['request'] as $key => $value){
-                                        $object->request($key, $value);
+                                    if(property_exists($record['node'], 'request')){
+                                        foreach($record['node']->request as $key => $value){
+                                            $object->request($key, $value);
+                                        }
                                     }
                                     $object->request('controller', $controller);
                                     $object->request('function', $function);
