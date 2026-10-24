@@ -236,7 +236,7 @@ trait Service {
                     [
                         'attribute' => 'not.after',
                         'value' => $microtime,
-                        'operator' => '<='
+                        'operator' => '>='
                     ],
                     'or',
                     [
