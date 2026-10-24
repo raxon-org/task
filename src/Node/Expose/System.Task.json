@@ -16,7 +16,8 @@
                             "output",
                             "notification",
                             "status",
-                            "is"
+                            "is",
+                            "not"
 
                         ],
                         "object": {
@@ -25,7 +26,11 @@
                                 "dynamic": true
                             },
                             "is": {
-                            "multiple": false,
+                              "multiple": false,
+                              "dynamic": true
+                            },
+                            "not": {
+                              "multiple": false,
                               "dynamic": true
                             }
                         }
@@ -47,7 +52,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -56,6 +62,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -78,7 +88,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -87,6 +98,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -109,7 +124,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -118,6 +134,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -140,7 +160,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -149,6 +170,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -171,7 +196,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -180,6 +206,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -202,7 +232,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -211,6 +242,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -233,7 +268,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -242,6 +278,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -264,7 +304,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -273,6 +314,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -295,7 +340,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -304,6 +350,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }
@@ -326,7 +376,8 @@
                       "output",
                       "notification",
                       "status",
-                      "is"
+                      "is",
+                      "not"
 
                     ],
                     "object": {
@@ -335,6 +386,10 @@
                         "dynamic": true
                       },
                       "is": {
+                        "multiple": false,
+                        "dynamic": true
+                      },
+                      "not": {
                         "multiple": false,
                         "dynamic": true
                       }

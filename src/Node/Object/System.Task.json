@@ -48,6 +48,15 @@
                 "multiple": false
             },
             {
+              "name": "not",
+              "type": "object",
+              "property": [
+                "before",
+                "after"
+              ],
+              "multiple": false
+            },
+            {
                 "name": "uuid",
                 "type": "uuid"
             },

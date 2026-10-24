@@ -39,6 +39,22 @@ trait Service {
         $controller = $options->controller ?? [];
         $request = $options->request ?? (object) [];
 
+        $not = $options->not ?? (object) [
+            'before' => null,
+            'after' => null,
+        ];
+        if(!property_exists($not, 'before')){
+            $not->before = null;
+        }
+        elseif(is_string($not->before)) {
+            $not->before = strtotime($not->before);
+        }
+        if(!property_exists($not, 'after')){
+            $not->after = null;
+        }
+        elseif(is_string($not->after)) {
+            $not->after = strtotime($not->after);
+        }
         if(empty($command) && empty($controller)){
             throw new Exception('Command or controller is required');
         }
@@ -101,7 +117,8 @@ trait Service {
                 'created' => $time,
                 'updated' => $time,
                 'deleted' => null,
-            ]
+            ],
+            'not' => $not,
         ];
         return $node->create($class, $node->role_system(), $record);
     }
@@ -176,8 +193,18 @@ trait Service {
         $role = $node->role_system();
 
         $options_execute = (object) [
-            'filter' => (object) [
-                'status' => Status::PENDING,
+            'where' => [
+                [
+                    'value' => Status::PENDING,
+                    'attribute' => 'status',
+                    'operator' => '==='
+                ],
+                'and',
+                [
+                    'attribute' => 'not.before',
+                    'value' => null,
+                    'operator' => '==='
+                ]
             ],
             'order' => (object) [
                 'is' => (object) [
@@ -190,7 +217,53 @@ trait Service {
         $time_start = time();
         while(true){
             $is_busy = false;
-            $record = $node->record($class, $role, $options_execute);
+            $microtime = microtime(true);
+            $options_execute_time = (object) [
+                'where' => [
+                    [
+                        'value' => Status::PENDING,
+                        'attribute' => 'status',
+                        'operator' => '==='
+                    ],
+                    'and',
+                    [
+                        'attribute' => 'not.before',
+                        'value' => $microtime,
+                        'operator' => '>='
+                    ],
+                    'and',
+                    '(',
+                    [
+                        'attribute' => 'not.after',
+                        'value' => $microtime,
+                        'operator' => '<='
+                    ],
+                    'or',
+                    [
+                        'attribute' => 'not.after',
+                        'value' => null,
+                        'operator' => '==='
+                    ],
+                    ')'
+                ],
+                'order' => (object) [
+                    'is' => (object) [
+                        'created' => 'ASC',
+                    ]
+                ]
+            ];
+            $record = $node->record($class, $role, $options_execute_time);
+            if(
+                is_array($record) &&
+                array_key_exists('node', $record) &&
+                $record['node'] !== null &&
+                property_exists($record['node'], 'uuid')
+            ){
+                dd($record);
+                //nothing
+            } else {
+                $record = $node->record($class, $role, $options_execute);
+            }
             //$record = Entity::record($object,$connection, $role, $options);
             if(is_array($record) && array_key_exists('node', $record)){
                 if(
