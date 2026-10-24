@@ -229,7 +229,7 @@ trait Service {
                     [
                         'attribute' => 'not.before',
                         'value' => $microtime,
-                        'operator' => '>='
+                        'operator' => '<='
                     ],
                     'and',
                     '(',
@@ -253,6 +253,7 @@ trait Service {
                 ]
             ];
             $record = $node->record($class, $role, $options_execute_time);
+            d($record);
             if(
                 is_array($record) &&
                 array_key_exists('node', $record) &&
