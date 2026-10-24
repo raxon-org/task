@@ -253,14 +253,12 @@ trait Service {
                 ]
             ];
             $record = $node->record($class, $role, $options_execute_time);
-            d($record);
             if(
                 is_array($record) &&
                 array_key_exists('node', $record) &&
                 $record['node'] !== null &&
                 property_exists($record['node'], 'uuid')
             ){
-                dd($record);
                 //nothing
             } else {
                 $record = $node->record($class, $role, $options_execute);
